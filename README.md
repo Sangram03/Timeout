@@ -1,4 +1,4 @@
-# ⌛ Timmo — Beautiful Focus Timer, Heatmaps & Leaderboards
+# ⌛ Timeout — Beautiful Focus Timer, Heatmaps & Leaderboards
 
 Timmo is a minimalist, premium productivity and focus application designed to help users track their focus times, observe their work consistency, and compete on a global leaderboard. It features custom countdowns, stopwatches, a GitHub-style activity heatmap, and a fully customizable dark-mode aesthetic.
 
