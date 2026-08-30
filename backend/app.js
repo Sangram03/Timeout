@@ -1,137 +1,56 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import path from "path";
-import { fileURLToPath } from "url";
+import "dotenv/config"
+import express from "express"
+const app = express()
+import userRouter from "./routes/userRouter.js"
+import stopwatchRouter from "./routes/stopwatchRouter.js" 
+import countdownRouter from "./routes/countdownRouter.js"
+import streakRouter from "./routes/streakRouter.js"
+import leaderboardRouter from "./routes/leaderboardRouter.js"
+// import "./cron/resetLeaderboard.js"
 
-import userRouter from "./routes/userRouter.js";
-import stopwatchRouter from "./routes/stopwatchRouter.js";
-import countdownRouter from "./routes/countdownRouter.js";
-import streakRouter from "./routes/streakRouter.js";
-import leaderboardRouter from "./routes/leaderboardRouter.js";
+
+
+
+import cors from "cors"
+import cookieParser from "cookie-parser"
+
 
 import {
     authLimiter,
     leaderboardLimiter,
     timerSaveLimiter
-} from "./middlewares/rateLimiters.js";
+} from "./middlewares/rateLimiters.js"
+ 
+app.use(cors({
+    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5176", "https://timmo-gamma.vercel.app"],
+    credentials: true
+}))  
+app.use(express.json())
+app.use(express.urlencoded({extended: true})) 
 
-import { ConectDB } from "./db/db.js";
-import { isLoggedIn } from "./middlewares/isLoggedIn.js";
-
-const app = express();
-
-// --------------------------------------------------
-// __dirname for ES modules
-// --------------------------------------------------
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// --------------------------------------------------
-// CORS
-// --------------------------------------------------
-
-app.use(
-    cors({
-        origin: [
-            "http://localhost:5173",
-            "http://localhost:5174",
-            "http://localhost:5176",
-            ""
-        ],
-        credentials: true
-    })
-);
-
-// --------------------------------------------------
-// Middleware
-// --------------------------------------------------
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// --------------------------------------------------
-// Database
-// --------------------------------------------------
-
-ConectDB();
-
-// --------------------------------------------------
-// Port
-// --------------------------------------------------
-
-const port = process.env.PORT || 3000;
-
-// --------------------------------------------------
-// Basic backend test
-// --------------------------------------------------
-
-app.get("/api", (req, res) => {
-    res.json({
-        success: true,
-        message: "API is running"
-    });
-});
-
-// --------------------------------------------------
-// Rate limiters
-// --------------------------------------------------
-
-app.use("/api/user/login", authLimiter);
-app.use("/api/user/signup", authLimiter);
-
-// --------------------------------------------------
-// API Routes
-// --------------------------------------------------
-
-app.use("/api/user", userRouter);
-
-app.use(
-    "/api/stopwatch",
-    isLoggedIn,
-    timerSaveLimiter,
-    stopwatchRouter
-);
-
-app.use(
-    "/api/countdown",
-    isLoggedIn,
-    timerSaveLimiter,
-    countdownRouter
-);
-
-app.use(
-    "/api/streak",
-    isLoggedIn,
-    streakRouter
-);
-
-app.use(
-    "/api/leaderboard",
-    isLoggedIn,
-    leaderboardLimiter,
-    leaderboardRouter
-);
+app.use(cookieParser()); 
+ 
+import { ConectDB } from "./db/db.js"
+import { isLoggedIn } from "./middlewares/isLoggedIn.js"
+ConectDB()
 
 
-// --------------------------------------------------
-// React Router fallback
-// --------------------------------------------------
 
-// This makes /login, /clock, /streak, etc.
-// load index.html instead of returning "Not Found".
+const port = process.env.PORT || 3000
 
-app.get(/^(?!\/api).*/, (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-});
+app.get("/", (req, res) => {
+    res.send("backend is running")
+})
 
-// --------------------------------------------------
-// Start server
-// --------------------------------------------------
+app.use("/api/user/login", authLimiter)
+app.use("/api/user/signup", authLimiter)
+app.use("/api/user", userRouter) 
+app.use("/api/stopwatch", isLoggedIn, timerSaveLimiter, stopwatchRouter)
+app.use("/api/countdown", isLoggedIn, timerSaveLimiter, countdownRouter)
+app.use("/api/streak", isLoggedIn, streakRouter)
+app.use("/api/leaderboard", isLoggedIn, leaderboardLimiter, leaderboardRouter)
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+
+app.listen(port, (req, res) => {
+    console.log("server is running on port 3000");
+}) 
