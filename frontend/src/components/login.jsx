@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import axios from "axios"
-import { useNavigate } from 'react-router'
+
 import toast from "react-hot-toast"
-import { ArrowLeft } from "lucide-react"
 import { GoogleLogin } from '@react-oauth/google'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
     const navigate = useNavigate()
