@@ -39,7 +39,7 @@ app.use(
             "http://localhost:5173",
             "http://localhost:5174",
             "http://localhost:5176",
-            "https://daily-streak-27xo.onrender.com"
+            ""
         ],
         credentials: true
     })
