@@ -1,31 +1,36 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import axios from 'axios'
-import './index.css'
-import App from './App.jsx'
-import Maintenance from './Maintenance'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import axios from "axios";
 
-// Automatically log out user if token expires (server responds with 401)
+import "./index.css";
+import App from "./App.jsx";
+import Maintenance from "./Maintenance.jsx";
+
+// Automatically log out user if token expires
 axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem("token");
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+
+            if (window.location.pathname !== "/login") {
+                window.location.href = "/login";
+            }
+        }
+
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
 );
 
-const maintenance = false
+const maintenance = false;
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      {maintenance ? <Maintenance/> : <App />}
-    </GoogleOAuthProvider>
-  </StrictMode>,
-)
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+createRoot(document.getElementById("root")).render(
+    <StrictMode>
+        <GoogleOAuthProvider clientId={googleClientId}>
+            {maintenance ? <Maintenance /> : <App />}
+        </GoogleOAuthProvider>
+    </StrictMode>
+);

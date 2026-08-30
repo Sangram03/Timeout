@@ -18,26 +18,69 @@ function Login() {
         })
     }
 
-    const handleGoogleSuccess = async (credentialResponse) => {
-        try {
-            const res = await axios.post("/api/user/google-login", {
-                credential: credentialResponse.credential
-            }, { withCredentials: true });
-            
-            if (res?.data?.success) {
-                localStorage.setItem("token", res?.data?.token);
-                toast.success(res?.data?.msg || "Successfully logged in!");
-                navigate("/clock")
-            }
-        } catch (err) {
-            console.error("Error during Google OAuth backend sign-in: ", err);
-            toast.error(
-                err?.response?.data?.msg || 
-                err?.message || 
-                "Google Authentication failed"
-            )
+   const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+        // Check Google credential
+        if (!credentialResponse?.credential) {
+            toast.error("Google credential not received.");
+            return;
         }
-    };
+
+        // Send credential to backend
+        const res = await axios.post(
+            "/api/user/google-login",
+            {
+                credential: credentialResponse.credential,
+            },
+            {
+                withCredentials: true,
+            }
+        );
+
+        console.log("Google login response:", res.data);
+
+        // Check successful login
+        if (res?.data?.success) {
+            // Save token
+            if (res?.data?.token) {
+                localStorage.setItem(
+                    "token",
+                    res.data.token
+                );
+            }
+
+            // Success message
+            toast.success(
+                res?.data?.msg || "Successfully logged in!"
+            );
+
+            // Redirect to Clock page
+            navigate("/clock", {
+                replace: true,
+            });
+
+            return;
+        }
+
+        // Backend returned success: false
+        toast.error(
+            res?.data?.msg || "Google login failed."
+        );
+
+    } catch (err) {
+        console.error(
+            "Error during Google OAuth backend sign-in:",
+            err
+        );
+
+        toast.error(
+            err?.response?.data?.msg ||
+            err?.response?.data?.message ||
+            err?.message ||
+            "Google Authentication failed"
+        );
+    }
+};
 
     const handleGoogleError = () => {
         toast.error("Google Authentication failed");
