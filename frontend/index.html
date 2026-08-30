@@ -1,110 +1,63 @@
-```html
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <!-- Favicon -->
     <link rel="icon" type="image/webp" href="/icon.webp" />
     <link rel="apple-touch-icon" href="/icon.webp" />
-
-    <!-- PWA -->
     <link rel="manifest" href="/manifest.json" />
-
-    <!-- Responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
-
-    <!-- SEO -->
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Samiran De" />
-    <meta
-      name="keywords"
-      content="focus timer, pomodoro timer, countdown timer, productivity heatmap, global productivity leaderboard, deep work workspace, study timer, coding timer, minimalist focus app, aesthetic pomodoro"
-    />
+    <meta name="keywords" content="focus timer, pomodoro timer, countdown timer, productivity heatmap, global productivity leaderboard, deep work workspace, study timer, coding timer, minimalist focus app, aesthetic pomodoro" />
+    <title>Timmo — Beautiful Focus Timer, Heatmaps & Leaderboards</title>
+    <meta name="description" content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics." />
 
-    <title>
-      Timmo — Beautiful Focus Timer, Heatmaps &amp; Leaderboards
-    </title>
+    <meta name="google-site-verification" content="atl9RNOv_RM5R1kTSTytu4TWw80-QfJ718mMfo8a5Jk" />
+    <link rel="canonical" href="https://www.timmo.co.in" />
 
-    <meta
-      name="description"
-      content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics."
-    />
-
-    <!-- Google Search Console -->
-    <meta
-      name="google-site-verification"
-      content="atl9RNOv_RM5R1kTSTytu4TWw80-QfJ718mMfo8a5Jk"
-    />
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.timmo.co.in/" />
-
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook Link Preview Tags -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.timmo.co.in/" />
-    <meta
-      property="og:title"
-      content="Timmo — Beautiful Focus Timer, Heatmaps &amp; Leaderboards"
-    />
-    <meta
-      property="og:description"
-      content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics."
-    />
-    <meta
-      property="og:image"
-      content="https://www.timmo.co.in/og-image.png"
-    />
+    <meta property="og:url" content="https://www.timmo.co.in" />
+    <meta property="og:title" content="Timmo — Beautiful Focus Timer, Heatmaps & Leaderboards" />
+    <meta property="og:description" content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics." />
+    <meta property="og:image" content="https://www.timmo.co.in/og-image.png" />
 
-    <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.timmo.co.in/" />
-    <meta
-      name="twitter:title"
-      content="Timmo — Beautiful Focus Timer, Heatmaps &amp; Leaderboards"
-    />
-    <meta
-      name="twitter:description"
-      content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics."
-    />
-    <meta
-      name="twitter:image"
-      content="https://www.timmo.co.in/og-image.png"
-    />
+    <!-- Twitter / X Link Preview Tags -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.timmo.co.in" />
+    <meta property="twitter:title" content="Timmo — Beautiful Focus Timer, Heatmaps & Leaderboards" />
+    <meta property="twitter:description" content="Timmo is a minimalist, premium focus application featuring workspaces, countdowns, activity heatmaps, global leaderboards, and customizable aesthetics." />
+    <meta property="twitter:image" content="https://www.timmo.co.in/og-image.png" />
     <meta name="twitter:creator" content="@samirande_" />
 
-    <!-- Structured Data / Schema.org -->
+    <!-- Structured Data (Schema.org / JSON-LD) -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Timmo",
-        "url": "https://www.timmo.co.in/",
-        "description": "A beautiful, minimalist focus timer featuring workspaces, countdowns, stopwatch, activity heatmaps, and global leaderboards to level up study and coding blocks.",
-        "applicationCategory": "UtilitiesApplication, Productivity",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires HTML5",
-        "screenshot": "https://www.timmo.co.in/og-image.png",
-        "creator": {
-          "@type": "Person",
-          "name": "Samiran De",
-          "url": "https://github.com/Sam721166"
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "USD"
-        }
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Timmo",
+      "url": "https://www.timmo.co.in",
+      "description": "A beautiful, minimalist focus timer featuring workspaces, countdowns, stopwatch, activity heatmaps, and global leaderboards to level up study and coding blocks.",
+      "applicationCategory": "UtilitiesApplication, Productivity",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5",
+      "screenshot": "https://www.timmo.co.in/og-image.png",
+      "creator": {
+        "@type": "Person",
+        "name": "Samiran De",
+        "url": "https://github.com/Sam721166"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
       }
+    }
     </script>
   </head>
-
   <body>
     <div id="root"></div>
-
-    <!-- React/Vite entry point -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-```
