@@ -116,24 +116,6 @@ app.use(
     leaderboardRouter
 );
 
-// --------------------------------------------------
-// React Frontend
-// --------------------------------------------------
-
-// IMPORTANT:
-// Change this path according to your project structure.
-//
-// Example:
-// project/
-// ├── backend/
-// │   └── server.js
-// └── frontend/
-//     └── dist/
-//
-
-const frontendPath = path.join(__dirname, "../frontend/dist");
-
-app.use(express.static(frontendPath));
 
 // --------------------------------------------------
 // React Router fallback
