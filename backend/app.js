@@ -22,7 +22,7 @@ import {
 } from "./middlewares/rateLimiters.js"
  
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5176", "https://timmo-gamma.vercel.app"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5176", "https://daily-streak-27xo.onrender.com"],
     credentials: true
 }))  
 app.use(express.json())
