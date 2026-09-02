@@ -4,7 +4,7 @@ import { HeatmapCalendar } from "@/components/heatmap-calendar"
 export default function ExampleFitness({ data = [], formatTime }) {
   const renderTooltip = React.useCallback((cell) => (
     <div>
-      <div className="font-medium">{formatTime ? formatTime(cell.value) : `${cell.value}s`}</div>
+      <div className="font-medium ">{formatTime ? formatTime(cell.value) : `${cell.value}s`}</div>
       <div className="text-muted-foreground">{cell.label}</div>
     </div>
   ), [formatTime])
