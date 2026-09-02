@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HiOutlineHome } from "react-icons/hi2";
-import { FaChartColumn } from "react-icons/fa6";
 import { FaRegChartBar } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Link, useLocation } from "react-router";
@@ -12,296 +11,1072 @@ import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { FaRegDotCircle } from "react-icons/fa";
 import { MdOutlineHourglassEmpty } from "react-icons/md";
 import { PiSignOutBold } from "react-icons/pi";
+
 import axios from "axios";
 import toast from "react-hot-toast";
 
-function Sidebar({sidebarOpt, outsideClick}) {
+import { useTheme } from "../context/ThemeContext";
 
-
+function Sidebar({ sidebarOpt, outsideClick }) {
   const [sidebar, setSidebar] = useState(true);
   const { pathname } = useLocation();
   const [user, setUser] = useState(null);
+
+  // =========================
+  // GLOBAL THEME
+  // =========================
+
+  const { theme } = useTheme();
+
+  const isDark = theme === "dark";
+
+  // =========================
+  // THEME CLASSES
+  // =========================
+
+  const sidebarBackground = isDark
+    ? "bg-neutral-900/98"
+    : "bg-white";
+
+  const sidebarText = isDark
+    ? "text-neutral-400"
+    : "text-neutral-600";
+
+  const sidebarBorder = isDark
+    ? "border-neutral-700/40"
+    : "border-neutral-200";
+
+  const headerBorder = isDark
+    ? "border-neutral-700/40"
+    : "border-neutral-200";
+
+  const hoverBackground = isDark
+    ? "hover:bg-neutral-700/40"
+    : "hover:bg-neutral-100";
+
+  const activeBackground = isDark
+    ? "bg-neutral-700/40"
+    : "bg-neutral-100";
+
+  const activeText = isDark
+    ? "text-white"
+    : "text-neutral-900";
+
+  const inactiveText = isDark
+    ? "text-neutral-500"
+    : "text-neutral-500";
+
+  const toggleText = isDark
+    ? "text-neutral-400"
+    : "text-neutral-600";
+
+  const toggleHoverText = isDark
+    ? "hover:text-white"
+    : "hover:text-neutral-900";
+
+  const profileBackground = isDark
+    ? "bg-neutral-800/65"
+    : "bg-neutral-100";
+
+  const profileBorder = isDark
+    ? "border-white/5"
+    : "border-neutral-200";
+
+  const profileName = isDark
+    ? "text-white"
+    : "text-neutral-900";
+
+  const profileSecondary = isDark
+    ? "text-neutral-500"
+    : "text-neutral-500";
+
+  // =========================
+  // FETCH USER
+  // =========================
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
+
         if (token) {
           const res = await axios.get("/api/user/me", {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
+
           if (res.data?.success) {
             setUser(res.data.user);
           }
         }
       } catch (err) {
-        console.error("Failed to fetch user in sidebar", err);
+        console.error(
+          "Failed to fetch user in sidebar",
+          err
+        );
       }
     };
+
     fetchUser();
 
     const handleProfileUpdate = (e) => {
       if (e.detail) {
-        setUser(prev => ({ ...prev, ...e.detail }));
+        setUser((prev) => ({
+          ...prev,
+          ...e.detail,
+        }));
       }
     };
-    window.addEventListener("profileUpdated", handleProfileUpdate);
-    return () => window.removeEventListener("profileUpdated", handleProfileUpdate);
+
+    window.addEventListener(
+      "profileUpdated",
+      handleProfileUpdate
+    );
+
+    return () =>
+      window.removeEventListener(
+        "profileUpdated",
+        handleProfileUpdate
+      );
   }, []);
 
+  // =========================
+  // ACTIVE ROUTE
+  // =========================
+
   const isActive = (path) => {
-    if (path === "/") return pathname === "/";
+    if (path === "/") {
+      return pathname === "/";
+    }
+
     return pathname.startsWith(path);
   };
+
+  // =========================
+  // SIDEBAR TOGGLE
+  // =========================
 
   const handleSidebar = () => {
     setSidebar(!sidebar);
   };
 
+  // =========================
+  // RESPONSIVE SIDEBAR
+  // =========================
+
   useEffect(() => {
     const handleResize = () => {
-        if (window.innerWidth < 1024) {
+      if (window.innerWidth < 1024) {
         setSidebar(false);
-        } else {
+      } else {
         setSidebar(true);
-        }
+      }
     };
 
     handleResize();
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
 
-    return () => window.removeEventListener("resize", handleResize);
-    }, []);
-  
+    return () =>
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+  }, []);
 
-    
+  // =========================
+  // LOGOUT
+  // =========================
+
   const logoutHandler = async () => {
-    try{
-        const res = await axios.post("/api/user/logout")
-        if(res?.data?.success){ 
-            localStorage.removeItem("token");
-            toast.success(res?.data?.msg)
-        }
-    }catch(err){
-        console.log("error while logout frontend: ", err);
-        toast.error(err.response?.data?.msg)
+    try {
+      const res = await axios.post(
+        "/api/user/logout"
+      );
+
+      if (res?.data?.success) {
+        localStorage.removeItem("token");
+
+        toast.success(res?.data?.msg);
+      }
+    } catch (err) {
+      console.log(
+        "error while logout frontend: ",
+        err
+      );
+
+      toast.error(
+        err.response?.data?.msg
+      );
     }
-  }
+  };
 
-
- 
-
+  // =========================
+  // SIDEBAR REF
+  // =========================
 
   const sidebarRef = useRef(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                outsideClick &&
-                sidebar &&
-                sidebarRef.current &&
-                !sidebarRef.current.contains(event.target)
-            ) {
-                setSidebar(false);
-            }
-        };
+  // =========================
+  // OUTSIDE CLICK
+  // =========================
 
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [sidebar, outsideClick]);
-
-
-    useEffect(() => {
-        if (sidebarOpt === "hover") {
-            setSidebar(false);
-        }
-
-        if (sidebarOpt === "manual") {
-            setSidebar(true);
-        }
-    }, [sidebarOpt]);
-
-
-
-    const timeoutRef = useRef(null);
-
-    const handleLeave = () => {
-        if (sidebarOpt === "hover") {
-            timeoutRef.current = setTimeout(() => {
-            setSidebar(false);
-            }, 300);
-        }
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        outsideClick &&
+        sidebar &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setSidebar(false);
+      }
     };
 
-    const handleEnter = () => {
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, [sidebar, outsideClick]);
+
+  // =========================
+  // SIDEBAR MODE
+  // =========================
+
+  useEffect(() => {
+    if (sidebarOpt === "hover") {
+      setSidebar(false);
+    }
+
+    if (sidebarOpt === "manual") {
+      setSidebar(true);
+    }
+  }, [sidebarOpt]);
+
+  // =========================
+  // HOVER MODE
+  // =========================
+
+  const timeoutRef = useRef(null);
+
+  const handleLeave = () => {
+    if (sidebarOpt === "hover") {
+      timeoutRef.current = setTimeout(() => {
+        setSidebar(false);
+      }, 300);
+    }
+  };
+
+  const handleEnter = () => {
     clearTimeout(timeoutRef.current);
-    };
+  };
 
-
+  // =========================
+  // RENDER
+  // =========================
 
   return (
     <div>
+      {/* =========================================
+          LEFT HOVER AREA
+      ========================================= */}
+
+      <div
+        className="fixed left-0 top-0 h-screen w-6 z-40"
+        onMouseEnter={() => {
+          if (
+            sidebarOpt === "hover" ||
+            sidebarOpt === "mix"
+          ) {
+            setSidebar(true);
+          }
+        }}
+      />
+
+      {/* =========================================
+          SIDEBAR TOGGLE BUTTON
+      ========================================= */}
+
+      <div
+        onClick={handleSidebar}
+        className={`
+          cursor-pointer
+          group
+          absolute
+          z-60
+          mt-5.5
+          transition-all
+          duration-300
+          ${toggleText}
+          ${toggleHoverText}
+          ${sidebar ? "ml-50" : "ml-5"}
+        `}
+      >
+        {sidebar ? (
+          <TbLayoutSidebarLeftCollapseFilled
+            className={`
+              text-2xl
+              transition-all
+              duration-100
+              ${toggleHoverText}
+            `}
+          />
+        ) : (
+          <TbLayoutSidebarRightCollapseFilled
+            className={`
+              text-2xl
+              transition-all
+              duration-100
+              ${toggleHoverText}
+            `}
+          />
+        )}
+      </div>
+
+      {/* =========================================
+          SIDEBAR
+      ========================================= */}
+
+      <div
+        ref={sidebarRef}
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        className={`
+          ${sidebar
+            ? "translate-x-0"
+            : "-translate-x-full"
+          }
+
+          transition-transform
+          duration-300
+
+          h-screen
+          w-60
+
+          ${sidebarBackground}
+          ${sidebarText}
+
+          px-3
+          py-5
+
+          flex
+          flex-col
+
+          border-r
+          ${sidebarBorder}
+
+          fixed
+          left-0
+          top-0
+          z-50
+
+          border-y-0
+          border-l-0
+
+          transition-colors
+          duration-300
+        `}
+      >
+        {/* =========================================
+            LOGO / HEADER
+        ========================================= */}
 
         <div
-            className="fixed left-0 top-0 h-screen w-6 z-40"
-            onMouseEnter={() => {
-                if (sidebarOpt === "hover" || sidebarOpt === "mix") {
-                setSidebar(true);
+          className={`
+            flex
+            justify-between
+            items-center
+            w-full
+
+            border-b
+            ${headerBorder}
+
+            pb-3
+            px-3
+          `}
+        >
+          <p
+            className={`
+              text-xl
+              font-gothic
+              tracking-wide
+              ${isDark
+                ? "text-white"
+                : "text-neutral-900"
+              }
+            `}
+          >
+            Timmo
+          </p>
+        </div>
+
+        {/* =========================================
+            MAIN NAVIGATION
+        ========================================= */}
+
+        <Link to="/clock">
+          <div
+            className={`
+              rounded-lg
+              h-10
+              p-2
+              px-3
+              mt-5
+              cursor-pointer
+              active:scale-99
+              transition-all
+              duration-100
+
+              ${hoverBackground}
+
+              font-gothic
+              flex
+              items-center
+              gap-2
+              group
+
+              ${isActive("/clock")
+                ? activeBackground
+                : ""
+              }
+            `}
+          >
+            <HiOutlineHome
+              className={`
+                text-xl
+                transition-all
+                duration-100
+
+                ${isActive("/clock")
+                  ? activeText
+                  : inactiveText
                 }
-            }}
-        />
-        
-            <div onClick={handleSidebar} className={` cursor-pointer group  absolute text-neutral-400 z-60 mt-5.5  transition-all duration-300    ${sidebar ? "ml-50" : "ml-5 "}`}> 
-                {sidebar ? (
-                <TbLayoutSidebarLeftCollapseFilled
-                    className={`text-2xl hover:text-white transition-all duration-100 group-hover:text-white `}
+              `}
+            />
+
+            <p
+              className={`
+                font-poppins
+                transition-all
+                duration-100
+
+                ${isActive("/clock")
+                  ? activeText
+                  : inactiveText
+                }
+              `}
+            >
+              Clock
+            </p>
+          </div>
+        </Link>
+
+        {/* =========================================
+            STOPWATCH
+        ========================================= */}
+
+        <Link to="/stopwatch">
+          <div
+            className={`
+              rounded-lg
+              h-10
+              p-2
+              px-3
+              mt-2
+              cursor-pointer
+              active:scale-99
+              transition-all
+              duration-100
+
+              ${hoverBackground}
+
+              font-gothic
+              flex
+              items-center
+              gap-2
+              group
+
+              ${isActive("/stopwatch")
+                ? activeBackground
+                : ""
+              }
+            `}
+          >
+            <FaRegDotCircle
+              className={`
+                text-lg
+                transition-all
+                duration-100
+
+                ${isActive("/stopwatch")
+                  ? activeText
+                  : inactiveText
+                }
+              `}
+            />
+
+            <p
+              className={`
+                font-poppins
+                transition-all
+                duration-100
+
+                ${isActive("/stopwatch")
+                  ? activeText
+                  : inactiveText
+                }
+              `}
+            >
+              Stopwatch
+            </p>
+          </div>
+        </Link>
+
+        {/* =========================================
+            COUNTDOWN
+        ========================================= */}
+
+        <Link to="/countdown">
+          <div
+            className={`
+              rounded-lg
+              h-10
+              p-2
+              px-3
+              mt-2
+              -mb-3
+              cursor-pointer
+              active:scale-99
+              transition-all
+              duration-100
+
+              ${hoverBackground}
+
+              font-gothic
+              flex
+              items-center
+              gap-2
+              group
+
+              ${isActive("/countdown")
+                ? activeBackground
+                : ""
+              }
+            `}
+          >
+            <MdOutlineHourglassEmpty
+              className={`
+                text-xl
+                transition-all
+                duration-100
+
+                ${isActive("/countdown")
+                  ? activeText
+                  : inactiveText
+                }
+              `}
+            />
+
+            <p
+              className={`
+                font-poppins
+                transition-all
+                duration-100
+
+                ${isActive("/countdown")
+                  ? activeText
+                  : inactiveText
+                }
+              `}
+            >
+              Countdown
+            </p>
+          </div>
+        </Link>
+
+        {/* =========================================
+            SECONDARY NAVIGATION
+        ========================================= */}
+
+        <div
+          className={`
+            border-t
+            ${headerBorder}
+
+            border-x-0
+            border-b-0
+
+            mt-8
+          `}
+        >
+          {/* =========================================
+              ANALYTICS
+          ========================================= */}
+
+          <Link to="/analytics">
+            <div
+              className={`
+                rounded-lg
+                h-10
+
+                ${hoverBackground}
+
+                p-2
+                px-3
+                mt-5
+
+                cursor-pointer
+                active:scale-99
+                transition-all
+                duration-100
+
+                font-gothic
+                flex
+                items-center
+                gap-2
+                group
+
+                ${isActive("/analytics")
+                  ? activeBackground
+                  : ""
+                }
+              `}
+            >
+              <FaRegChartBar
+                className={`
+                  text-lg
+                  transition-all
+                  duration-100
+
+                  ${isActive("/analytics")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              />
+
+              <p
+                className={`
+                  font-poppins
+                  transition-all
+                  duration-100
+
+                  ${isActive("/analytics")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              >
+                Analytics
+              </p>
+            </div>
+          </Link>
+
+          {/* =========================================
+              LEADERBOARD
+          ========================================= */}
+
+          <Link to="/leaderboard">
+            <div
+              className={`
+                rounded-lg
+                h-10
+
+                ${hoverBackground}
+
+                p-2
+                px-3
+
+                cursor-pointer
+                active:scale-99
+                transition-all
+                duration-100
+
+                font-gothic
+                flex
+                items-center
+                gap-2
+                group
+
+                mt-2
+
+                ${isActive("/leaderboard")
+                  ? activeBackground
+                  : ""
+                }
+              `}
+            >
+              <MdOutlineLeaderboard
+                className={`
+                  text-xl
+                  transition-all
+                  duration-100
+
+                  ${isActive("/leaderboard")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              />
+
+              <p
+                className={`
+                  font-poppins
+                  transition-all
+                  duration-100
+
+                  ${isActive("/leaderboard")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              >
+                Leaderboard
+              </p>
+            </div>
+          </Link>
+
+          {/* =========================================
+              PROFILE
+          ========================================= */}
+
+          <Link to="/profile">
+            <div
+              className={`
+                rounded-lg
+                h-10
+
+                ${hoverBackground}
+
+                p-2
+                px-3
+                mt-2
+
+                cursor-pointer
+                active:scale-99
+                transition-all
+                duration-100
+
+                font-gothic
+                flex
+                items-center
+                gap-2
+                group
+
+                ${isActive("/profile")
+                  ? activeBackground
+                  : ""
+                }
+              `}
+            >
+              <MdOutlineAccountCircle
+                className={`
+                  text-2xl
+                  transition-all
+                  duration-100
+
+                  ${isActive("/profile")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              />
+
+              <p
+                className={`
+                  font-poppins
+                  transition-all
+                  duration-100
+
+                  ${isActive("/profile")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              >
+                Profile
+              </p>
+            </div>
+          </Link>
+
+          {/* =========================================
+              SETTINGS
+          ========================================= */}
+
+          <Link to="/settings">
+            <div
+              className={`
+                rounded-lg
+                h-10
+
+                ${hoverBackground}
+
+                p-2
+                px-3
+                mt-2
+
+                cursor-pointer
+                active:scale-99
+                transition-all
+                duration-100
+
+                font-gothic
+                flex
+                items-center
+                gap-2
+                group
+
+                ${isActive("/settings")
+                  ? activeBackground
+                  : ""
+                }
+              `}
+            >
+              <IoSettingsOutline
+                className={`
+                  text-xl
+                  transition-all
+                  duration-100
+
+                  ${isActive("/settings")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              />
+
+              <p
+                className={`
+                  font-poppins
+                  transition-all
+                  duration-100
+
+                  ${isActive("/settings")
+                    ? activeText
+                    : inactiveText
+                  }
+                `}
+              >
+                Settings
+              </p>
+            </div>
+          </Link>
+        </div>
+
+        {/* =========================================
+            USER PROFILE / LOGOUT
+        ========================================= */}
+
+        {user ? (
+          <div
+            className={`
+              rounded-lg
+              w-54
+
+              ${profileBackground}
+              ${profileBorder}
+
+              overflow-hidden
+              mt-auto
+
+              px-3
+              py-2
+
+              flex
+              items-center
+              justify-between
+              gap-2
+
+              shadow-inner
+
+              transition-colors
+              duration-300
+            `}
+          >
+            <Link
+              to="/profile"
+              className="
+                flex
+                items-center
+                gap-2
+                min-w-0
+                flex-1
+
+                hover:opacity-85
+                transition-opacity
+              "
+            >
+              {/* USER IMAGE */}
+
+              {user.picture ? (
+                <img
+                  src={user.picture}
+                  alt={user.name}
+                  className={`
+                    size-8
+                    rounded-full
+                    object-cover
+
+                    border
+
+                    ${isDark
+                      ? "border-white/10"
+                      : "border-neutral-300"
+                    }
+                  `}
+                  referrerPolicy="no-referrer"
                 />
-                ) : (
-                <TbLayoutSidebarRightCollapseFilled className="text-2xl hover:text-white transition-all duration-100 group-hover:text-white  " />
-                )}
-            </div>
+              ) : (
+                <div
+                  className={`
+                    size-8
+                    rounded-full
 
-            <div 
-                ref={sidebarRef}   
-                onMouseEnter={handleEnter}
-                onMouseLeave={handleLeave}
-                className={`${sidebar ?  "translate-x-0" : "-translate-x-full"}
-                    transition-transform duration-300
-                    h-screen w-60 bg-neutral-900/98
-                    text-neutral-400 px-3 py-5 flex flex-col
-                    border-r border-neutral-700/40
-                    fixed left-0 top-0 z-50
-                      border-r-neutral-700/40 border-y-0 border-l-0 border`}>
-                        
-                <div className=" flex justify-between items-center w-full border-b-neutral-700/40 border-x-0 border-t-0 border-2 pb-3 px-3 ">
+                    ${isDark
+                      ? "bg-neutral-700"
+                      : "bg-neutral-200"
+                    }
 
-                    <p className="text-xl font-gothic  tracking-wide ">Timmo</p>
+                    ${isDark
+                      ? "text-white"
+                      : "text-neutral-900"
+                    }
 
+                    font-bold
+                    flex
+                    items-center
+                    justify-center
+                    text-sm
+                  `}
+                >
+                  {user.name
+                    ? user.name[0].toUpperCase()
+                    : "?"}
                 </div>
+              )}
 
+              {/* USER INFORMATION */}
 
+              <div className="flex flex-col min-w-0">
+                <p
+                  className={`
+                    text-xs
+                    font-semibold
+                    truncate
+                    leading-snug
+                    ${profileName}
+                  `}
+                >
+                  {user.name}
+                </p>
 
-                <Link to="/clock">
-                    <div className={`rounded-lg h-10  p-2 px-3 mt-5 cursor-pointer active:scale-99 transition-all duration-100 hover:bg-neutral-700/40 font-gothic flex items-center gap-2 group ${isActive("/clock") ? "bg-neutral-700/40" : ""}`}>
+                <p
+                  className={`
+                    text-[9px]
+                    truncate
+                    leading-none
+                    ${profileSecondary}
+                  `}
+                >
+                  View Profile
+                </p>
+              </div>
+            </Link>
 
-                        <HiOutlineHome className={`text-xl transition-all duration-100 ${isActive("/clock") ? "text-white" : "text-neutral-500"}`} />
-                        <p className={`font-poppins  transition-all duration-100  ${isActive("/clock") ? "text-white" : "text-neutral-500"}`}>
-                            Clock
-                        </p>
+            {/* LOGOUT */}
 
-                    </div>
-                </Link>
+            <Link
+              to="/login"
+              onClick={logoutHandler}
+              title="Sign Out"
+              className="
+                text-neutral-500
+                hover:text-red-400
+                transition-colors
+                p-1
+              "
+            >
+              <PiSignOutBold className="text-lg" />
+            </Link>
+          </div>
+        ) : (
+          <div
+            className={`
+              rounded-lg
+              w-54
 
+              ${profileBackground}
+              ${profileBorder}
 
-                <Link to="/stopwatch">
-                    <div className={`rounded-lg h-10  p-2 px-3 mt-2 cursor-pointer active:scale-99 transition-all duration-100 hover:bg-neutral-700/40 font-gothic flex items-center gap-2 group ${isActive("/stopwatch") ? "bg-neutral-700/40" : ""}`}>
+              overflow-hidden
+              mt-auto
 
-                        <FaRegDotCircle className={`text-lg transition-all duration-100 ${isActive("/stopwatch") ? "text-white" : "text-neutral-500"}`} />
-                        <p className={`font-poppins  transition-all duration-100  ${isActive("/stopwatch") ? "text-white" : "text-neutral-500"}`}>
-                            Stopwatch
-                        </p>
+              px-3
+              py-2
 
-                    </div>
-                </Link>
+              flex
+              items-center
+              justify-between
+              gap-2
 
+              shadow-inner
 
-                <Link to="/countdown">
-                    <div className={`rounded-lg h-10  p-2 px-3 mt-2 -mb-3 cursor-pointer active:scale-99 transition-all duration-100 hover:bg-neutral-700/40 font-gothic flex items-center gap-2 group  ${isActive("/countdown") ? "bg-neutral-700/40" : ""}`}>
+              transition-colors
+              duration-300
+            `}
+          >
+            <Link
+              to="/login"
+              onClick={logoutHandler}
+              className={`
+                flex
+                gap-2
+                items-center
 
-                        <MdOutlineHourglassEmpty className={`text-xl transition-all duration-100 ${isActive("/countdown") ? "text-white" : "text-neutral-500"}`} />
-                        <p className={`font-poppins  transition-all duration-100  ${isActive("/countdown") ? "text-white" : "text-neutral-500"}`}>
-                            Countdown
-                        </p>
+                ${hoverBackground}
 
-                    </div>
-                </Link>
+                rounded
+                px-2
+                py-1.5
 
+                transition-all
+                duration-100
 
+                w-full
+                cursor-pointer
+              `}
+            >
+              <PiSignOutBold
+                className={`
+                  text-lg
+                  ${inactiveText}
+                `}
+              />
 
-                <div className=" border-t-neutral-700/40 border-x-0 border-b-0 border-2 mt-8">
-                    <Link to="/analytics">
-                        <div className={`rounded-lg h-10 hover:bg-neutral-700/40 p-2 px-3 mt-5 cursor-pointer active:scale-99 transition-all duration-100 font-gothic flex items-center gap-2 group ${isActive("/analytics") ? "bg-neutral-700/40" : ""}`}>
-
-                            <FaRegChartBar className={`text-lg  transition-all duration-100  ${isActive("/analytics") ? "text-white" : "text-neutral-500"}`} />
-                            <p className={`font-poppins  transition-all duration-100   ${isActive("/analytics") ? "text-white" : "text-neutral-500"}`}>
-                                Analytics
-                            </p>
-
-                        </div>
-                    </Link>
-                
-                    <Link to="/leaderboard">
-                        <div className={`rounded-lg h-10 hover:bg-neutral-700/40 p-2 px-3  cursor-pointer active:scale-99 transition-all duration-100 font-gothic flex items-center gap-2 group mt-2 ${isActive("/leaderboard") ? "bg-neutral-700/40" : ""}`}>
-
-                            <MdOutlineLeaderboard className={`text-xl  transition-all duration-100  ${isActive("/leaderboard") ? "text-white" : "text-neutral-500"}`} />
-                            <p className={`font-poppins  transition-all duration-100   ${isActive("/leaderboard") ? "text-white" : "text-neutral-500"}`}>
-                                Leaderboard
-                            </p>
-
-                        </div>
-                    </Link>
-                
-
-                    <Link to="/profile">
-                        <div className={`rounded-lg h-10 hover:bg-neutral-700/40 p-2 px-3 mt-2 cursor-pointer active:scale-99 transition-all duration-100 font-gothic flex items-center gap-2 group ${isActive("/profile") ? "bg-neutral-700/40" : ""}`}>
-                            <MdOutlineAccountCircle className={`text-2xl  transition-all duration-100  ${isActive("/profile") ? "text-white" : "text-neutral-500"}`} />
-                            <p className={`font-poppins transition-all duration-100   ${isActive("/profile") ? "text-white" : "text-neutral-500"}`}>
-                                Profile
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link to="/settings">
-                        <div className={`rounded-lg h-10 hover:bg-neutral-700/40 p-2 px-3 mt-2 cursor-pointer active:scale-99 transition-all duration-100 font-gothic flex items-center gap-2 group ${isActive("/settings") ? "bg-neutral-700/40" : ""}`}>
-
-                            <IoSettingsOutline className={`text-xl  transition-all duration-100  ${isActive("/settings") ? "text-white" : "text-neutral-500"}`} />
-                                <p className={`font-poppins transition-all duration-100   ${isActive("/settings") ? "text-white" : "text-neutral-500"}`}>
-                                    Settings
-                                </p>
-
-                        </div>
-                    </Link>
-
-                </div>
-
-                {user ? (
-                    <div className="rounded-lg w-54 bg-neutral-800/65 border border-white/5 overflow-hidden mt-auto px-3 py-2 flex items-center justify-between gap-2 shadow-inner">
-                        <Link to="/profile" className="flex items-center gap-2 min-w-0 flex-1 hover:opacity-85 transition-opacity">
-                            {user.picture ? (
-                                <img src={user.picture} alt={user.name} className="size-8 rounded-full object-cover border border-white/10" referrerPolicy="no-referrer" />
-                            ) : (
-                                <div className="size-8 rounded-full bg-neutral-700 text-white font-bold flex items-center justify-center text-sm">
-                                    {user.name ? user.name[0].toUpperCase() : "?"}
-                                </div>
-                            )}
-                            <div className="flex flex-col min-w-0">
-                                <p className="text-xs font-semibold text-white truncate leading-snug">{user.name}</p>
-                                <p className="text-[9px] text-neutral-500 truncate leading-none">View Profile</p>
-                            </div>
-                        </Link>
-                        <Link to="/login" onClick={logoutHandler} title="Sign Out" className="text-neutral-500 hover:text-red-400 transition-colors p-1">
-                            <PiSignOutBold className="text-lg" />
-                        </Link>
-                    </div>
-                ) : (
-                    <div className="rounded-lg w-54 bg-neutral-800/65 border border-white/5 overflow-hidden mt-auto px-3 py-2 flex items-center justify-between gap-2 shadow-inner">
-                        <Link to="/login" onClick={logoutHandler} className="flex gap-2 items-center hover:bg-neutral-700/40 rounded px-2 py-1.5 transition-all duration-100 w-full cursor-pointer">
-                            <PiSignOutBold className="text-lg text-neutral-500" /> 
-                            <p className="text-xs text-neutral-500 font-semibold">Sign Out</p>
-                        </Link>
-                    </div>
-                )}
-
-                
-
-            </div>
-
-        
-
+              <p
+                className={`
+                  text-xs
+                  font-semibold
+                  ${inactiveText}
+                `}
+              >
+                Sign Out
+              </p>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
