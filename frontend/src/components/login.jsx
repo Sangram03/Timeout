@@ -568,7 +568,7 @@ function Login() {
                                     <p className="mt-5 max-w-xl text-sm  leading-6 text-neutral-500 sm:text-base">
                                         
                                         
-                                        Timmo.
+                                        Timeout.
                                     </p>
                                 </div>
 
@@ -884,7 +884,7 @@ function Login() {
                                         </div>
 
                                         <h1 className="text-3xl font-black uppercase tracking-[0.32em] text-white sm:text-4xl">
-                                            Timmo
+                                            Timeout
                                         </h1>
 
                                         <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.38em] text-neutral-600">

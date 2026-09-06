@@ -42,7 +42,7 @@ const Navbar = () => {
     <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-3 sm:top-8 sm:px-4">
       <nav className="relative flex h-12 w-full max-w-[390px] items-center justify-between rounded-full border border-neutral-200/80 bg-white/70 px-4 text-black shadow-xl shadow-black/5 backdrop-blur-2xl sm:h-14 sm:max-w-[640px] sm:px-6">
         <Link to="/" className="text-xl font-bold">
-          Timmo
+          Timeout
         </Link>
 
         <div className="hidden items-center justify-center gap-1 sm:flex">

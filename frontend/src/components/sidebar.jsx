@@ -417,7 +417,7 @@ function Sidebar({ sidebarOpt, outsideClick }) {
               }
             `}
           >
-            Timmo
+            Timeout
           </p>
         </div>
 
