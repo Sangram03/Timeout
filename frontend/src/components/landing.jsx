@@ -61,7 +61,7 @@ function Landing() {
         scrollbarColor: "#171717 transparent",
       }}
     >
-      <title>Timmo — Beautiful Focus Timer, Heatmaps & Leaderboards</title>
+      <title>Timeout — Beautiful Focus Timer, Heatmaps & Leaderboards</title>
       <meta name="author" content="Samiran De" />
       <meta
         name="description"
@@ -78,7 +78,7 @@ function Landing() {
               to="/"
               className="font-gothic text-lg tracking-wide hover:opacity-80 transition"
             >
-              Timmo
+              Timeout
             </Link>
 
             <div className="hidden items-center gap-7 font-sans text-xs font-bold uppercase tracking-wider text-neutral-500 md:flex">

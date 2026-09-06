@@ -86,7 +86,7 @@ function NotificationCard({ name, description, icon, color, time }) {
       className={cn(
         "relative mx-auto w-full cursor-pointer overflow-hidden rounded-2xl p-3",
         "transition-all duration-200 ease-in-out hover:scale-[103%]",
-        "bg-white/90 shadow-[0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
+        "bg-white/95 shadow-[0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
       )}
     >
       <div className="flex flex-row items-center gap-3">
@@ -97,14 +97,14 @@ function NotificationCard({ name, description, icon, color, time }) {
           <span className="text-base">{icon}</span>
         </div>
         <div className="flex min-w-0 flex-col overflow-hidden">
-          <figcaption className="flex flex-row items-center gap-1 text-sm font-semibold text-neutral-900">
+          <figcaption className="flex flex-row items-center gap-1 text-sm font-semibold text-[#241010]">
             <span className="truncate">{name}</span>
-            <span className="text-neutral-300">·</span>
-            <span className="shrink-0 text-[11px] font-medium text-neutral-400">
+            <span className="text-[#f0dada]">·</span>
+            <span className="shrink-0 text-[11px] font-medium text-[#987070]">
               {time}
             </span>
           </figcaption>
-          <p className="truncate text-xs font-medium text-neutral-500">
+          <p className="truncate text-xs font-medium text-[#805858]">
             {description}
           </p>
         </div>
@@ -215,10 +215,10 @@ function ContributionGraph({ weeks }) {
                       </TooltipTrigger>
                       <TooltipContent
                         sideOffset={6}
-                        className="border-0 bg-neutral-900 px-2.5 py-1.5 text-[11px] text-white"
+                        className="border-0 bg-[#180707] px-2.5 py-1.5 text-[11px] text-white"
                       >
                         <span className="font-semibold">{cell.date}</span>
-                        <span className="ml-1.5 text-neutral-300">
+                        <span className="ml-1.5 text-[#f0dada]">
                           {cell.mins === 0
                             ? "No activity"
                             : `${cell.mins} mins`}
@@ -279,7 +279,7 @@ function PreviewClock() {
         <p className="font-inter font-medium text-[2.4rem] leading-none tabular-nums text-white sm:text-7xl md:text-9xl"><NumberFlow value={pHours} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={pMinutes} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={pSeconds} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} /></p>
         <p className="font-gothic text-sm tracking-wider text-white/50 sm:text-2xl md:text-3xl">{ampm}</p>
       </div>
-      <p className="mt-3 font-poppins text-[10px] tracking-[0.15em] text-neutral-500 sm:mt-4 sm:text-xs">LIVE PREVIEW</p>
+      <p className="mt-3 font-poppins text-[10px] tracking-[0.15em] text-[#805858] sm:mt-4 sm:text-xs">LIVE PREVIEW</p>
     </div>
   );
 }
@@ -307,15 +307,15 @@ function PreviewStopwatch() {
       <p className="font-inter font-medium text-[2.2rem] leading-none tabular-nums text-white sm:text-6xl md:text-8xl"><NumberFlow value={hNum} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={mNum} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={sNum} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} /></p>
       <div className="flex gap-3 sm:gap-4">
         {running ? (
-          <button onClick={() => { setRunning(false); startRef.current = null; }} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
+          <button onClick={() => { setRunning(false); startRef.current = null; }} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
             <Pause className="size-3.5 sm:size-4" /> Pause
           </button>
         ) : (
-          <button onClick={() => { startRef.current = Date.now() - elapsed; setRunning(true); }} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
+          <button onClick={() => { startRef.current = Date.now() - elapsed; setRunning(true); }} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
             <Play className="size-3.5 sm:size-4" /> Start
           </button>
         )}
-        <button onClick={() => { setRunning(false); setElapsed(0); startRef.current = null; }} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
+        <button onClick={() => { setRunning(false); setElapsed(0); startRef.current = null; }} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-6 sm:py-3 sm:text-sm">
           <Square className="size-3.5 sm:size-4" /> Reset
         </button>
       </div>
@@ -366,22 +366,22 @@ function PreviewCountdown() {
                 setTotal(secs || 1500);
                 setRemaining(secs || 1500);
               }}
-              className="w-12 h-9 rounded border border-neutral-700 bg-neutral-800 text-center font-poppins text-xs text-white sm:w-14 sm:h-10 sm:text-sm"
+              className="w-12 h-9 rounded border border-neutral-700 bg-[#321414] text-center font-poppins text-xs text-white sm:w-14 sm:h-10 sm:text-sm"
             />
           ))}
         </div>
       )}
       <div className="flex gap-3">
         {running ? (
-          <button onClick={() => setRunning(false)} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm">
+          <button onClick={() => setRunning(false)} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm">
             <Pause className="size-3.5 sm:size-4" /> Pause
           </button>
         ) : (
-          <button onClick={() => { setRunning(true); }} disabled={display <= 0} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm disabled:opacity-40">
+          <button onClick={() => { setRunning(true); }} disabled={display <= 0} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm disabled:opacity-40">
             <Play className="size-3.5 sm:size-4" /> Start
           </button>
         )}
-        <button onClick={() => { setRunning(false); setRemaining(total); }} className="flex cursor-pointer items-center gap-2 rounded-md bg-neutral-800 px-4 py-2 font-poppins text-xs text-white border-2 border-neutral-700/60 hover:bg-neutral-700/60 transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm">
+        <button onClick={() => { setRunning(false); setRemaining(total); }} className="flex cursor-pointer items-center gap-2 rounded-md bg-[#321414] px-4 py-2 font-poppins text-xs text-white border-2 border-[#a43a3a]/40 hover:bg-[#651c1c] transition-all active:scale-98 sm:px-5 sm:py-2 sm:text-sm">
           <Square className="size-3.5 sm:size-4" /> Reset
         </button>
       </div>
@@ -402,16 +402,16 @@ function PreviewAnalytics() {
           { title: "Current streak", time: "14 days" },
           { title: "Average time", time: "1 h 04 m" },
         ].map((stat) => (
-          <div key={stat.title} className="group min-h-20 rounded-lg border border-white/10 bg-neutral-800/30 p-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-200 hover:border-white/13 hover:bg-neutral-800/40 sm:min-h-32 sm:p-5">
-            <p className="font-poppins text-[10px] tracking-[0.1em] text-neutral-500 sm:text-sm">{stat.title}</p>
+          <div key={stat.title} className="group min-h-20 rounded-lg border border-[#ff5b52]/15 bg-[#321414]/30 p-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition duration-200 hover:border-white/13 hover:bg-[#321414]/40 sm:min-h-32 sm:p-5">
+            <p className="font-poppins text-[10px] tracking-[0.1em] text-[#805858] sm:text-sm">{stat.title}</p>
             <p className="mt-2 font-poppins text-lg font-semibold tracking-normal text-white sm:mt-3 sm:text-3xl">{stat.time}</p>
           </div>
         ))}
       </div>
-      <div className="rounded-lg border border-white/10 bg-neutral-900 shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
-        <div className="flex items-center gap-2 border-b border-white/10 bg-neutral-800/50 px-4 py-3 sm:px-5 sm:py-4">
+      <div className="rounded-lg border border-[#ff5b52]/15 bg-[#180707] shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
+        <div className="flex items-center gap-2 border-b border-[#ff5b52]/15 bg-[#321414]/50 px-4 py-3 sm:px-5 sm:py-4">
           <span className="size-2 rounded-full bg-green-500" />
-          <p className="font-poppins text-[10px] uppercase tracking-[0.18em] text-neutral-500 sm:text-xs">Time tracked</p>
+          <p className="font-poppins text-[10px] uppercase tracking-[0.18em] text-[#805858] sm:text-xs">Time tracked</p>
         </div>
         <div className="flex h-28 items-end justify-between gap-1.5 p-4 sm:h-[200px] sm:p-5">
           {fakeBars.map((h, i) => (
@@ -420,7 +420,7 @@ function PreviewAnalytics() {
                 className="w-full max-w-[32px] rounded-t-[7px] bg-white/85 transition-all duration-300 hover:bg-white"
                 style={{ height: `${(h / maxBar) * 100}%` }}
               />
-              <span className="mt-1.5 font-poppins text-[10px] text-neutral-500">{months[i]}</span>
+              <span className="mt-1.5 font-poppins text-[10px] text-[#805858]">{months[i]}</span>
             </div>
           ))}
         </div>
@@ -433,9 +433,9 @@ function DashboardPreview() {
   const [active, setActive] = useState("clock");
 
   return (
-    <div className="mx-auto w-full max-w-[410px] overflow-hidden rounded-[22px] border border-white/20 bg-neutral-900 shadow-2xl shadow-black/25 sm:max-w-none sm:rounded-2xl">
+    <div className="mx-auto w-full max-w-[410px] overflow-hidden rounded-[22px] border border-[#ff5b52]/20 bg-[#180707] shadow-2xl shadow-black/25 sm:max-w-none sm:rounded-2xl">
       <div className="flex flex-col sm:flex-row">
-        <div className="flex w-full shrink-0 flex-row items-center justify-start gap-1 border-b border-neutral-700/40 bg-neutral-900/98 p-2 sm:w-44 sm:flex-col sm:items-stretch sm:border-b-0 sm:border-r sm:p-3">
+        <div className="flex w-full shrink-0 flex-row items-center justify-start gap-1 border-b border-[#8f2b2b]/30 bg-[#180707]/98 p-2 sm:w-44 sm:flex-col sm:items-stretch sm:border-b-0 sm:border-r sm:p-3">
           <p className="hidden font-gothic text-lg tracking-wide text-white sm:mb-6 sm:block">Timmo</p>
           <nav className="flex flex-row gap-1 sm:flex-col">
             {SIDEBAR_ITEMS.map((item) => {
@@ -446,8 +446,8 @@ function DashboardPreview() {
                   onClick={() => setActive(item.id)}
                 className={`flex size-8 cursor-pointer items-center justify-center gap-1.5 rounded-lg font-poppins text-[10px] font-medium transition-all duration-100 sm:size-auto sm:justify-start sm:px-3 sm:py-2 sm:text-xs ${
                     active === item.id
-                      ? "bg-neutral-700/40 text-white"
-                      : "text-neutral-500 hover:bg-neutral-700/30 hover:text-neutral-300"
+                      ? "bg-[#5a1717]/70 text-white"
+                      : "text-[#805858] hover:bg-[#4a1515]/50 hover:text-[#f0dada]"
                   }`}
                 >
                   <IconComp className="size-3.5 shrink-0 sm:size-4" />
@@ -456,10 +456,10 @@ function DashboardPreview() {
               );
             })}
           </nav>
-          <div className="hidden border-t border-neutral-700/40 pt-3 sm:mt-auto sm:block">
-            <div className="flex items-center gap-2 rounded-lg bg-neutral-800/50 px-3 py-2">
-              <div className="flex size-6 items-center justify-center rounded-full bg-neutral-600 text-[10px] font-bold text-white">U</div>
-              <p className="truncate font-poppins text-[11px] text-neutral-400">Demo User</p>
+          <div className="hidden border-t border-[#8f2b2b]/30 pt-3 sm:mt-auto sm:block">
+            <div className="flex items-center gap-2 rounded-lg bg-[#321414]/50 px-3 py-2">
+              <div className="flex size-6 items-center justify-center rounded-full bg-[#8f2b2b] text-[10px] font-bold text-white">U</div>
+              <p className="truncate font-poppins text-[11px] text-[#987070]">Demo User</p>
             </div>
           </div>
         </div>
@@ -511,9 +511,9 @@ const Hero = () => {
       diffuse: 0.45,
       mapSamples: 16000,
       mapBrightness: 1.15,
-      baseColor: [0.92, 0.9, 1],
-      markerColor: [0.37, 0.16, 0.77],
-      glowColor: [0.95, 0.93, 1],
+      baseColor: [1, 0.91, 0.91],
+      markerColor: [0.86, 0.08, 0.08],
+      glowColor: [1, 0.72, 0.72],
       markers: [
         { location: [19.076, 72.8777], size: 0.1 },
         { location: [40.7128, -74.006], size: 0.1 },
@@ -581,21 +581,22 @@ const Hero = () => {
   };
 
   return (
-    <main className="min-h-screen w-screen overflow-x-hidden bg-neutral-50 text-neutral-950 ">
+    <main className="min-h-screen w-screen overflow-x-hidden bg-[#fff7f7] text-[#180707] ">
       <Navbar />
 
       <section id="home" className="relative isolate overflow-hidden px-4 pb-14 pt-36 sm:min-h-[110vh] sm:pb-0 sm:pt-36">
         <div className="absolute inset-x-0 top-0 -z-10 h-screen overflow-hidden">
-          <div className="h-full w-full bg-[url('/trendybg.png')] bg-cover bg-center mask-t-from-30% mask-b-from-90%" />
+          <div className="h-full w-full bg-[url('/trendybg.png')] bg-cover bg-center mask-t-from-30% mask-b-from-90% opacity-35 grayscale" />
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_25%,rgba(239,68,68,0.18),transparent_38%),linear-gradient(to_bottom,rgba(255,247,247,0.9),rgba(255,247,247,0.55),#fff7f7)]" />
         </div>
         <div className="absolute inset-x-0 top-0 -z-10 h-64 bg-gradient-to-b from-white via-white/70 to-transparent" />
 
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center text-center">
           <div className="pt-12 sm:pt-[15vh]">
-            <h1 className="mx-auto max-w-[22rem] text-[2rem] leading-[1.04] tracking-[-0.01em] text-black/90 sm:max-w-3xl sm:text-5xl sm:leading-[0.92] sm:tracking-[-0.02em] md:text-7xl">
+            <h1 className="mx-auto max-w-[22rem] text-[2.35rem] font-semibold leading-[1.04] tracking-[-0.01em] text-[#180707] sm:max-w-3xl sm:text-5xl sm:leading-[0.92] sm:tracking-[-0.02em] md:text-7xl">
               A workspace built for focused work.
             </h1>
-            <p className="mx-auto mt-4 max-w-[21rem] text-[13px] leading-6 text-black/80 sm:mt-6 sm:max-w-xl sm:text-base sm:leading-7 lg:text-lg">
+            <p className="mx-auto mt-4 max-w-[21rem] text-[13px] leading-6 text-[#4b2222] sm:mt-6 sm:max-w-xl sm:text-base sm:leading-7 lg:text-lg">
               Track every session with a clock, timer, stopwatch, streaks,
               heatmaps, leaderboards, and detailed insights.
             </p>
@@ -603,7 +604,7 @@ const Hero = () => {
             <div className="mx-auto mt-7 flex w-full max-w-[23rem] flex-col items-center justify-center gap-3 px-0 sm:mt-10 sm:max-w-none sm:w-auto sm:flex-row">
               <Button asChild
                 size="lg"
-                className="h-11 w-full rounded-full bg-neutral-950 px-8 text-sm font-semibold text-white hover:bg-neutral-850 sm:h-12 sm:w-auto sm:text-lg"
+                className="h-11 w-full rounded-full bg-[#180707] px-8 text-sm font-semibold text-white hover:bg-[#3a1010] sm:h-12 sm:w-auto sm:text-lg"
               >
                 <Link to={localStorage.getItem("token") ? "/clock" : "/login"}>
                   Dashboard
@@ -611,7 +612,7 @@ const Hero = () => {
               </Button>
               <Button
                 onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
-                className="h-11 w-full rounded-full border border-lime-500/70 bg-lime-300 px-8 text-sm font-semibold text-black transition-all duration-200 hover:bg-lime-400 sm:h-12 sm:w-auto sm:text-lg"
+                className="h-11 w-full rounded-full border border-[#ff3b30]/60 bg-[#ff3b30] px-8 text-sm font-semibold text-black transition-all duration-200 hover:bg-[#e52b21] sm:h-12 sm:w-auto sm:text-lg"
               >
                 Product Demo
               </Button>
@@ -624,12 +625,12 @@ const Hero = () => {
         </div>
       </section>
 
-      <section id="stats" className="bg-neutral-50 overflow-hidden mt-16 sm:mt-20">
+      <section id="stats" className="bg-[#fff7f7] overflow-hidden mt-16 sm:mt-20">
         <div className="flex flex-col justify-center items-center px-4 py-8 gap-3 sm:py-10 sm:gap-5">
-          <h1 className="text-3xl max-w-sm text-center font-medium leading-tight sm:text-4xl md:text-5xl sm:max-w-lg">
+          <h1 className="text-3xl max-w-sm text-center font-semibold leading-tight sm:text-4xl md:text-5xl sm:max-w-lg">
             Our Numbers Speak for Themselves
           </h1>
-          <p className="text-base text-neutral-600 sm:text-xl">
+          <p className="text-base text-[#6e3c3c] sm:text-xl">
             Powered by our growing community.
           </p>
         </div>
@@ -656,9 +657,9 @@ const Hero = () => {
           ].map((card, index) => (
             <div
               key={index}
-              className="mt-5 rounded-2xl bg-white p-2 shadow-md ring-1 ring-neutral-100 md:mt-0"
+              className="mt-5 rounded-2xl bg-white p-2 shadow-[0_20px_60px_rgba(127,29,29,0.08)] ring-1 ring-[#f4dada] md:mt-0"
             >
-              <div className="w-85 max-w-85 rounded-xl bg-neutral-100 px-2 py-2 h-[240px] overflow-hidden">
+              <div className="w-85 max-w-85 rounded-xl bg-[#fff1f1] px-2 py-2 h-[240px] overflow-hidden">
                 <video
                   src={card.videoSrc}
                   className="h-full w-full rounded-xl object-cover"
@@ -673,7 +674,7 @@ const Hero = () => {
               <div className="px-4 py-3">
                 <h2 className="text-xl font-semibold"><NumberFlow value={card.value} className="tabular-nums" willChange isolate style={{ display: "inline-block" }} />{card.suffix}</h2>
                 <p
-                  className={`whitespace-nowrap text-base font-medium text-neutral-500`}
+                  className={`whitespace-nowrap text-base font-medium text-[#805858]`}
                 >
                   {card.description}
                 </p>
@@ -683,17 +684,17 @@ const Hero = () => {
         </div>
       </section>
 
-      <section id="features" className="bg-neutral-50 overflow-hidden py-10 md:py-20 my-10 md:my-20">
+      <section id="features" className="bg-[#fff7f7] overflow-hidden py-10 md:py-20 my-10 md:my-20">
         <div className="flex flex-col justify-center items-center px-4 py-8 gap-3 sm:px-6 lg:px-8 sm:py-10 sm:gap-5">
-          <h1 className="text-3xl max-w-sm text-center font-medium leading-tight sm:text-4xl md:text-5xl sm:max-w-lg">
+          <h1 className="text-3xl max-w-sm text-center font-semibold leading-tight sm:text-4xl md:text-5xl sm:max-w-lg">
             Everything for your work and focus
           </h1>
-          <p className="text-base text-center text-neutral-600 sm:text-xl">
+          <p className="text-base text-center text-[#6e3c3c] sm:text-xl">
             A beautiful, integrated toolkit designed for deep work.
           </p>
           <div className="grid grid-cols-1 mt-8 w-full max-w-7xl gap-5 px-5 sm:mt-10 sm:px-0 md:grid-cols-3">
             {/* First Box */}
-            <div className="bg-purple-100/60 border overflow-hidden grid border-purple-300/50 h-full rounded-4xl flex-col items-start justify-start">
+            <div className="bg-[#fff0ef] border overflow-hidden grid border-[#ffb4ad]/70 h-full rounded-[2rem] flex-col items-start justify-start">
               <div>
                 <video
                   src="/firstbox.mp4"
@@ -709,7 +710,7 @@ const Hero = () => {
                 <div>
                   <div className="[&_h3]:leading-[1.18]">
                     <h3 className="font-instrument-sans text-[22px] font-medium leading-[1.08] tracking-[-0.04em] text-[#151515] sm:text-[28px] sm:leading-[1.05] sm:tracking-[-0.045em]">
-                      <span className="block text-[#7B35F0]">14 days </span>
+                      <span className="block text-[#dc2626]">14 days </span>
                       <span className="block text-[#17152A]">consistency</span>
                     </h3>
                   </div>
@@ -723,12 +724,12 @@ const Hero = () => {
             </div>
 
             {/* Second Box */}
-            <div className="col-span-1 md:col-span-2 flex h-auto min-h-[420px] md:h-100 items-center justify-center rounded-4xl bg-sky-100/60 border border-sky-200/60 px-4 py-8 sm:px-8">
+            <div className="col-span-1 md:col-span-2 flex h-auto min-h-[420px] md:h-100 items-center justify-center rounded-[2rem] bg-[#fff0ef] border border-[#ffb4ad]/70 px-4 py-8 sm:px-8">
               <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
                 <div className="max-w-[320px] text-left">
                   <div className="[&_h3]:leading-[1.18]">
                     <h3 className="font-instrument-sans text-[22px] font-medium leading-[1.08] tracking-[-0.04em] text-[#151515] sm:text-[28px] sm:leading-[1.05] sm:tracking-[-0.045em]">
-                      <span className="block text-[#0586d2]">Timer Clock </span>
+                      <span className="block text-[#dc2626]">Timer Clock </span>
                       <span className="block text-[#17152A]">
                         Build your own countdown.
                       </span>
@@ -742,8 +743,8 @@ const Hero = () => {
 
                 <div className="w-full max-w-[520px]">
                   <div className="flex items-center justify-center gap-2 sm:gap-6">
-                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/70 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
-                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-slate-500">
+                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/90 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
+                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-[#8a5a5a]">
                         Hours
                       </span>
                       <WheelPickerWrapper className="w-16 sm:w-24">
@@ -760,8 +761,8 @@ const Hero = () => {
                       </WheelPickerWrapper>
                     </div>
 
-                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/70 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
-                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-slate-500">
+                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/90 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
+                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-[#8a5a5a]">
                         Min
                       </span>
                       <WheelPickerWrapper className="w-16 sm:w-24">
@@ -778,8 +779,8 @@ const Hero = () => {
                       </WheelPickerWrapper>
                     </div>
 
-                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/70 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
-                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-slate-500">
+                    <div className="flex min-w-[76px] sm:min-w-[96px] flex-col items-center rounded-xl sm:rounded-2xl bg-white/90 px-2 py-2 sm:px-3 sm:py-3 shadow-sm">
+                      <span className="mb-2 text-[8px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-[#8a5a5a]">
                         Sec
                       </span>
                       <WheelPickerWrapper className="w-16 sm:w-24">
@@ -802,19 +803,19 @@ const Hero = () => {
                       <Button
                         onClick={handleStart}
                         disabled={totalSeconds <= 0 || isRunning}
-                        className="rounded-full bg-[#0586d2] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0470b5]"
+                        className="rounded-full bg-[#dc2626] px-4 py-2 text-sm font-semibold text-white hover:bg-[#b91c1c]"
                       >
                         Start
                       </Button>
                       <Button
                         onClick={handleReset}
                         variant="outline"
-                        className="rounded-full border-sky-200 bg-white hover:text-black px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                        className="rounded-full border-[#ffc4be] bg-white hover:text-black px-4 py-2 text-sm font-semibold text-[#542525] hover:bg-slate-100"
                       >
                         Reset
                       </Button>
                     </div>
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="text-sm font-medium text-[#542525]">
                       {isRunning ? "Counting down: " : "Ready: "}
                       <NumberFlow value={Math.floor(remainingSeconds / 3600)} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={Math.floor((remainingSeconds % 3600) / 60)} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />:<NumberFlow value={remainingSeconds % 60} format={{ minimumIntegerDigits: 2 }} className="tabular-nums" willChange isolate style={{ display: "inline-block", width: "2ch", textAlign: "center" }} />
                     </p>
@@ -824,10 +825,10 @@ const Hero = () => {
             </div>
 
             {/* Third — Activity heatmap (GitHub contribution style) */}
-            <div className="flex h-100 flex-col overflow-hidden rounded-4xl border border-[#f0d9b8]/70 bg-[#fff2df] px-6 py-6 sm:px-8 sm:py-7">
+            <div className="flex h-100 flex-col overflow-hidden rounded-[2rem] border-t-2 border border-[#f3c5c1]/80 bg-[#fff1f1] px-6 py-6 sm:px-8 sm:py-7">
               <div className="[&_h3]:leading-[1.18]">
                 <h3 className="max-w-xs font-instrument-sans text-[22px] font-medium leading-[1.08] tracking-[-0.04em] text-[#151515] sm:text-[28px] sm:leading-[1.05] sm:tracking-[-0.045em]">
-                  <span className="block text-[#c64e27]">
+                  <span className="block text-[#c62828]">
                     Heatmap of your consistency
                   </span>
                 </h3>
@@ -843,10 +844,10 @@ const Hero = () => {
             </div>
 
             {/* Fourth — Live activity feed (Animated List) */}
-            <div className="flex h-100 flex-col overflow-hidden rounded-4xl border border-[#cfe9c8]/80 bg-[#eeffe8] px-6 py-6 sm:px-8">
+            <div className="flex h-100 flex-col overflow-hidden rounded-[2rem] border-t-2 border border-[#ffc7c2]/80 bg-[#fff0f0] px-6 py-6 sm:px-8">
               <div className="[&_h3]:leading-[1.18]">
                 <h3 className="max-w-xs font-instrument-sans text-[22px] font-medium leading-[1.08] tracking-[-0.04em] text-[#151515] sm:text-[28px] sm:leading-[1.05] sm:tracking-[-0.045em]">
-                  <span className="block text-[#359462]">
+                  <span className="block text-[#c62828]">
                     Real-time activity feed
                   </span>
                 </h3>
@@ -870,10 +871,10 @@ const Hero = () => {
             </div>
 
             {/* Fifth — Community globe */}
-            <div className="relative flex h-100 flex-col overflow-hidden rounded-4xl border border-[#ddd0ff]/70 bg-[#f2eeff] px-6 py-6 sm:px-8">
+            <div className="relative flex h-100 flex-col overflow-hidden rounded-[2rem] border border-[#ffc7c2]/80 bg-[#fff0f0] px-6 py-6 sm:px-8">
               <div className="relative z-10 [&_h3]:leading-[1.18]">
                 <h3 className="max-w-xs font-instrument-sans text-[22px] font-medium leading-[1.08] tracking-[-0.04em] text-[#151515] sm:text-[28px] sm:leading-[1.05] sm:tracking-[-0.045em]">
-                  <span className="block text-[#5e2ac4]">
+                  <span className="block text-[#b91c1c]">
                     Global focus community
                   </span>
                 </h3>
@@ -889,43 +890,43 @@ const Hero = () => {
                   className="top-0 left-1/2 max-w-none -translate-x-1/2 scale-110"
                   config={globeConfig}
                 />
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(94,42,196,0.12),transparent_55%)]" />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(220,38,38,0.14),transparent_55%)]" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="preview" className="bg-neutral-50 py-16 md:py-24">
+      <section id="preview" className="bg-[#fff7f7] py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center gap-5">
           <h1 className="text-3xl sm:text-4xl md:text-5xl max-w-lg text-center font-medium leading-tight">
             Live Focus Sessions Charts with users
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-center text-neutral-600 max-w-lg">
+          <p className="text-base sm:text-lg md:text-xl text-center text-[#6e3c3c] max-w-lg">
             Real-time updates of deep work, consistency streaks, and task
             completions from Users.
           </p>
 
-          <div className="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-sm p-2 sm:p-4 w-full mt-5">
+          <div className="overflow-hidden rounded-3xl border border-[#f0cccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-sm p-2 sm:p-4 w-full mt-5">
             <Table>
               <TableHeader>
-                <TableRow className="border-neutral-100 hover:bg-transparent">
-                  <TableHead className="font-bold text-neutral-600 pl-4">
+                <TableRow className="border-[#f3dede] hover:bg-transparent">
+                  <TableHead className="font-bold text-[#6e3c3c] pl-4">
                     User
                   </TableHead>
-                  <TableHead className="font-bold text-neutral-600">
+                  <TableHead className="font-bold text-[#6e3c3c]">
                     Activity
                   </TableHead>
-                  <TableHead className="font-bold text-neutral-600">
+                  <TableHead className="font-bold text-[#6e3c3c]">
                     Duration
                   </TableHead>
-                  <TableHead className="font-bold text-neutral-600">
+                  <TableHead className="font-bold text-[#6e3c3c]">
                     Streak
                   </TableHead>
-                  <TableHead className="font-bold text-neutral-600">
+                  <TableHead className="font-bold text-[#6e3c3c]">
                     Time
                   </TableHead>
-                  <TableHead className="font-bold text-neutral-600 pr-4 text-right">
+                  <TableHead className="font-bold text-[#6e3c3c] pr-4 text-right">
                     Status
                   </TableHead>
                 </TableRow>
@@ -935,10 +936,10 @@ const Hero = () => {
                   {
                     name: "Samiran De",
                     initials: "SD",
-                    bg: "bg-purple-500",
+                    bg: "bg-[#b91c1c]",
                     activity: "React Frontend Coding",
                     icon: (
-                      <Laptop className="w-4 h-4 text-purple-500 shrink-0" />
+                      <Laptop className="w-4 h-4 text-[#dc2626] shrink-0" />
                     ),
                     duration: "45 mins",
                     streak: "14 days",
@@ -948,10 +949,10 @@ const Hero = () => {
                   {
                     name: "Alex Rivera",
                     initials: "AR",
-                    bg: "bg-blue-500",
+                    bg: "bg-[#ef4444]",
                     activity: "UI/UX Figma Design",
                     icon: (
-                      <Palette className="w-4 h-4 text-blue-500 shrink-0" />
+                      <Palette className="w-4 h-4 text-[#ef4444] shrink-0" />
                     ),
                     duration: "1h 30m",
                     streak: "8 days",
@@ -961,10 +962,10 @@ const Hero = () => {
                   {
                     name: "Yuki Tanaka",
                     initials: "YT",
-                    bg: "bg-orange-500",
+                    bg: "bg-[#f97316]",
                     activity: "Japanese Kanji Practice",
                     icon: (
-                      <BookOpen className="w-4 h-4 text-orange-500 shrink-0" />
+                      <BookOpen className="w-4 h-4 text-[#ea580c] shrink-0" />
                     ),
                     duration: "25 mins",
                     streak: "32 days",
@@ -974,10 +975,10 @@ const Hero = () => {
                   {
                     name: "Sarah Jenkins",
                     initials: "SJ",
-                    bg: "bg-emerald-500",
+                    bg: "bg-[#fff0ee]0",
                     activity: "Technical Docs Writing",
                     icon: (
-                      <PenTool className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <PenTool className="w-4 h-4 text-[#dc2626] shrink-0" />
                     ),
                     duration: "2h 10m",
                     streak: "5 days",
@@ -987,10 +988,10 @@ const Hero = () => {
                   {
                     name: "Michael Chen",
                     initials: "MC",
-                    bg: "bg-rose-500",
+                    bg: "bg-[#be123c]",
                     activity: "Financial Modeling",
                     icon: (
-                      <BarChart2 className="w-4 h-4 text-rose-500 shrink-0" />
+                      <BarChart2 className="w-4 h-4 text-[#be123c] shrink-0" />
                     ),
                     duration: "50 mins",
                     streak: "21 days",
@@ -1000,7 +1001,7 @@ const Hero = () => {
                 ].map((row, idx) => (
                   <TableRow
                     key={idx}
-                    className="border-neutral-100/50 hover:bg-neutral-50/50 transition-colors"
+                    className="border-[#f3dede]/50 hover:bg-[#fff7f7]/50 transition-colors"
                   >
                     <TableCell className="font-medium pl-4 py-3.5">
                       <div className="flex items-center gap-3">
@@ -1009,34 +1010,34 @@ const Hero = () => {
                         >
                           {row.initials}
                         </div>
-                        <span className="font-bold text-neutral-900 text-sm">
+                        <span className="font-bold text-[#241010] text-sm">
                           {row.name}
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-neutral-600 font-medium text-sm">
+                    <TableCell className="text-[#6e3c3c] font-medium text-sm">
                       <div className="flex items-center gap-2">
                         {row.icon}
                         <span>{row.activity}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-neutral-900 font-semibold text-sm">
+                    <TableCell className="text-[#241010] font-semibold text-sm">
                       {row.duration}
                     </TableCell>
-                    <TableCell className="text-neutral-500 font-medium text-sm">
+                    <TableCell className="text-[#805858] font-medium text-sm">
                       <span className="flex items-center gap-1.5">
-                        <Flame className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
-                        <span className="font-bold text-neutral-800">
+                        <Flame className="w-4 h-4 text-[#ef4444] fill-[#ef4444] shrink-0" />
+                        <span className="font-bold text-[#351313]">
                           {row.streak}
                         </span>
                       </span>
                     </TableCell>
-                    <TableCell className="text-neutral-450 text-neutral-400 font-medium text-xs">
+                    <TableCell className="text-neutral-450 text-[#987070] font-medium text-xs">
                       {row.time}
                     </TableCell>
                     <TableCell className="pr-4 text-right py-3.5">
-                      <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-250/30 border-emerald-200/50 px-2.5 py-0.5 rounded-full text-[11px] font-bold">
-                        <CheckCircle className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <span className="inline-flex items-center gap-1 bg-[#fff0ee] text-[#b42318] border border-emerald-250/30 border-[#ffb4ad]/60 px-2.5 py-0.5 rounded-full text-[11px] font-bold">
+                        <CheckCircle className="w-3 h-3 text-[#e02d21] shrink-0" />
                         {row.status}
                       </span>
                     </TableCell>
@@ -1049,7 +1050,7 @@ const Hero = () => {
       </section>
 
       <CTA11 />
-      <section className="bg-neutral-50 px-4 py-16 md:py-24">
+      <section className="bg-[#fff7f7] px-4 py-16 md:py-24">
         <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/70 bg-white">
           <div className="relative isolate min-h-[360px] bg-[url('/cta.jpeg')] bg-cover bg-center px-6 py-8 sm:px-10 sm:py-10 md:min-h-[390px] md:px-12">
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.82)_44%,rgba(255,255,255,0.28)_72%,rgba(255,255,255,0.05)_100%)]" />
@@ -1057,13 +1058,13 @@ const Hero = () => {
 
             <div className="flex min-h-[300px] flex-col justify-between gap-10 md:min-h-[310px] md:flex-row md:items-center">
               <div className="max-w-[34rem]">
-                <span className="inline-flex items-center rounded-full border border-neutral-900/10 bg-white/70 px-3 py-1 text-xs font-semibold text-neutral-700 backdrop-blur">
+                <span className="inline-flex items-center rounded-full border border-neutral-900/10 bg-white/90 px-3 py-1 text-xs font-semibold text-[#512626] backdrop-blur">
                   Sponsor Timmo
                 </span>
-                <h2 className="mt-5 max-w-lg text-3xl font-medium leading-tight text-neutral-950 sm:text-4xl md:text-5xl">
+                <h2 className="mt-5 max-w-lg text-3xl font-medium leading-tight text-[#180707] sm:text-4xl md:text-5xl">
                   Help us build the ultimate workspace.
                 </h2>
-                <p className="mt-5 max-w-md text-sm font-medium leading-7 text-neutral-700 sm:text-base">
+                <p className="mt-5 max-w-md text-sm font-medium leading-7 text-[#512626] sm:text-base">
                   Timmo is indie-crafted and free of clutter. Your support keeps
                   the servers running, funds new focus widgets, and helps us
                   keep building a quieter web.
@@ -1073,10 +1074,10 @@ const Hero = () => {
               <div className="flex w-full flex-col gap-3 sm:max-w-xs">
                 <Button
                   asChild
-                  className="h-12 justify-between rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white hover:bg-neutral-800"
+                  className="h-12 justify-between rounded-full bg-[#180707] px-5 text-sm font-semibold text-white hover:bg-[#321414]"
                 >
                   <a
-                    href="https://github.com/sponsors/Sam721166"
+                    href="https://github.com/sponsors/Sangram03"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -1087,7 +1088,7 @@ const Hero = () => {
                 <Button
                   asChild
                   variant="outline"
-                  className="h-12 justify-between rounded-full border-white/80 bg-white/80 px-5 text-sm font-semibold text-neutral-950 backdrop-blur hover:bg-white hover:text-black"
+                  className="h-12 justify-between rounded-full border-white/90 bg-white/80 px-5 text-sm font-semibold text-[#180707] backdrop-blur hover:bg-white hover:text-black"
                 >
                   <a
                     href="https://buymeacoffee.com/samirande_"
@@ -1095,7 +1096,7 @@ const Hero = () => {
                     rel="noopener noreferrer"
                   >
                     Buy Me a Coffee
-                    <ArrowUpRight className="w-4 h-4 text-neutral-500 transition-transform duration-300 group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5" />
+                    <ArrowUpRight className="w-4 h-4 text-[#805858] transition-transform duration-300 group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5" />
                   </a>
                 </Button>
               </div>

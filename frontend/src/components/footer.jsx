@@ -10,12 +10,12 @@ const navLinks = [
 
 const socialLinks = [
   {
-    href: "https://x.com/samirande_",
+    href: "https://x.com/sangtramdas_1",
     label: "X",
     icon: <XIcon />,
   },
   {
-    href: "https://github.com/Sam721166/",
+    href: "https://github.com/Sangram/",
     label: "Github",
     icon: <GithubIcon />,
   },
@@ -31,7 +31,7 @@ export function Footer() {
               href="/"
               className="text-lg font-bold tracking-wide hover:opacity-85 transition-opacity"
             >
-              Timmo
+              Timeout
             </a>
           </div>
           <div className="flex items-center">
@@ -63,22 +63,22 @@ export function Footer() {
         </nav>
       </div>
       <div className="flex items-center justify-between gap-4 border-t py-4 text-muted-foreground text-sm">
-        <p>&copy; {new Date().getFullYear()} Timmo. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Timeout. All rights reserved.</p>
 
         <p className="inline-flex items-center gap-1">
           <span>Built with ❤️ by</span>
           <a
             aria-label="x/twitter"
             className="inline-flex items-center gap-1 text-foreground/80 hover:text-foreground hover:underline font-semibold"
-            href={"https://github.com/Sam721166"}
+            href={"https://github.com/Sangram03"}
             rel="noreferrer"
             target="_blank"
           >
             <img
-              alt="samiran"
+              alt="sangram"
               className="size-4 rounded-full"
               height="auto"
-              src="https://github.com/Sam721166.png"
+              src="https://github.com/Sangram03.png"
               width="auto"
             />
             Samiran De
