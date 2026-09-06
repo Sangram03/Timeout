@@ -436,7 +436,7 @@ function DashboardPreview() {
     <div className="mx-auto w-full max-w-[410px] overflow-hidden rounded-[22px] border border-[#ff5b52]/20 bg-[#180707] shadow-2xl shadow-black/25 sm:max-w-none sm:rounded-2xl">
       <div className="flex flex-col sm:flex-row">
         <div className="flex w-full shrink-0 flex-row items-center justify-start gap-1 border-b border-[#8f2b2b]/30 bg-[#180707]/98 p-2 sm:w-44 sm:flex-col sm:items-stretch sm:border-b-0 sm:border-r sm:p-3">
-          <p className="hidden font-gothic text-lg tracking-wide text-white sm:mb-6 sm:block">Timmo</p>
+          <p className="hidden font-gothic text-lg tracking-wide text-white sm:mb-6 sm:block">Timeout</p>
           <nav className="flex flex-row gap-1 sm:flex-col">
             {SIDEBAR_ITEMS.map((item) => {
               const IconComp = item.Icon;
@@ -1059,13 +1059,13 @@ const Hero = () => {
             <div className="flex min-h-[300px] flex-col justify-between gap-10 md:min-h-[310px] md:flex-row md:items-center">
               <div className="max-w-[34rem]">
                 <span className="inline-flex items-center rounded-full border border-neutral-900/10 bg-white/90 px-3 py-1 text-xs font-semibold text-[#512626] backdrop-blur">
-                  Sponsor Timmo
+                  Sponsor Timeout
                 </span>
                 <h2 className="mt-5 max-w-lg text-3xl font-medium leading-tight text-[#180707] sm:text-4xl md:text-5xl">
                   Help us build the ultimate workspace.
                 </h2>
                 <p className="mt-5 max-w-md text-sm font-medium leading-7 text-[#512626] sm:text-base">
-                  Timmo is indie-crafted and free of clutter. Your support keeps
+                  Timeout is indie-crafted and free of clutter. Your support keeps
                   the servers running, funds new focus widgets, and helps us
                   keep building a quieter web.
                 </p>
