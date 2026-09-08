@@ -1,83 +1,21 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
-import {
-    BarChart,
-    Bar,
-    CartesianGrid,
-    XAxis,
-    YAxis,
-    ResponsiveContainer,
-    Tooltip,
-    Cell,
-} from "recharts";
-
 function Login() {
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const [mousePos, setMousePos] = useState({
         x: 0,
         y: 0,
     });
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-
     // =========================================================
-    // CHART DATA
-    // =========================================================
-
-    const chartData = [
-        {
-            month: "January",
-            shortMonth: "Jan",
-            value: 65,
-            color: "#6366F1",
-        },
-        {
-            month: "February",
-            shortMonth: "Feb",
-            value: 59,
-            color: "#8B5CF6",
-        },
-        {
-            month: "March",
-            shortMonth: "Mar",
-            value: 80,
-            color: "#EC4899",
-        },
-        {
-            month: "April",
-            shortMonth: "Apr",
-            value: 81,
-            color: "#F43F5E",
-        },
-        {
-            month: "May",
-            shortMonth: "May",
-            value: 56,
-            color: "#F97316",
-        },
-        {
-            month: "June",
-            shortMonth: "Jun",
-            value: 55,
-            color: "#14B8A6",
-        },
-        {
-            month: "July",
-            shortMonth: "Jul",
-            value: 40,
-            color: "#06B6D4",
-        },
-    ];
-
-    // =========================================================
-    // MOUSE SPOTLIGHT
+    // MOUSE EFFECT
     // =========================================================
 
     const handleMouseMove = (e) => {
@@ -170,7 +108,7 @@ function Login() {
     };
 
     // =========================================================
-    // GOOGLE LOGIN ERROR
+    // GOOGLE ERROR
     // =========================================================
 
     const handleGoogleError = () => {
@@ -187,106 +125,58 @@ function Login() {
         import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     // =========================================================
-    // CUSTOM TOOLTIP
-    // =========================================================
-
-    const CustomTooltip = ({
-        active,
-        payload,
-        label,
-    }) => {
-        if (!active || !payload || !payload.length) {
-            return null;
-        }
-
-        const item = payload[0];
-
-        return (
-            <div className="animate-tooltip rounded-xl border border-white/10 bg-[#111111]/95 px-4 py-3 shadow-2xl backdrop-blur-xl">
-                <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                    {label}
-                </p>
-
-                <div className="flex items-center gap-2">
-                    <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{
-                            backgroundColor:
-                                item.payload.color,
-                        }}
-                    />
-
-                    <p className="text-sm font-bold text-white">
-                        {item.value} sessions
-                    </p>
-                </div>
-            </div>
-        );
-    };
-
-    // =========================================================
-    // STATS
-    // =========================================================
-
-    const totalSessions = chartData.reduce(
-        (total, item) => total + item.value,
-        0
-    );
-
-    const bestMonth = chartData.reduce(
-        (best, item) =>
-            item.value > best.value ? item : best,
-        chartData[0]
-    );
-
-    // =========================================================
     // JSX
     // =========================================================
 
     return (
         <>
-            {/* =====================================================
-                ANIMATIONS
-            ====================================================== */}
-
             <style>
                 {`
-                    @keyframes floatSlow {
-                        0%, 100% {
-                            transform: translate3d(0, 0, 0);
-                        }
+                    /* =====================================================
+                       RESET
+                       (!important overrides needed because Vite's default
+                       index.css ships #root { max-width:1280px; margin:0 auto;
+                       padding:2rem } + body { display:flex; place-items:center },
+                       which shrink-wraps #root and left-aligns everything
+                       inside it instead of letting this page truly center
+                       in the viewport.)
+                    ====================================================== */
 
-                        50% {
-                            transform: translate3d(0, -20px, 0);
-                        }
+                    html,
+                    body {
+                        width: 100% !important;
+                        min-width: 100% !important;
+                        min-height: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        display: block !important;
+                        place-items: unset !important;
                     }
 
-                    @keyframes floatReverse {
-                        0%, 100% {
-                            transform: translate3d(0, 0, 0);
-                        }
-
-                        50% {
-                            transform: translate3d(20px, 15px, 0);
-                        }
+                    #root {
+                        width: 100% !important;
+                        min-width: 100% !important;
+                        min-height: 100% !important;
+                        max-width: none !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        text-align: left !important;
                     }
 
-                    @keyframes pulseGlow {
-                        0%, 100% {
-                            opacity: 0.15;
-                            transform: scale(1);
-                        }
-
-                        50% {
-                            opacity: 0.45;
-                            transform: scale(1.1);
-                        }
+                    *,
+                    *::before,
+                    *::after {
+                        box-sizing: border-box;
                     }
+
+                    /* =====================================================
+                       ANIMATIONS
+                    ====================================================== */
 
                     @keyframes slideUp {
                         from {
                             opacity: 0;
-                            transform: translateY(30px);
+                            transform: translateY(24px);
                         }
 
                         to {
@@ -295,83 +185,202 @@ function Login() {
                         }
                     }
 
-                    @keyframes slideRight {
+                    @keyframes logoAppear {
                         from {
                             opacity: 0;
-                            transform: translateX(30px);
+                            transform: scale(0.85) translateY(10px);
                         }
 
                         to {
                             opacity: 1;
-                            transform: translateX(0);
+                            transform: scale(1) translateY(0);
                         }
                     }
 
                     @keyframes shimmer {
                         0% {
-                            transform: translateX(-120%);
+                            transform: translateX(-150%);
                         }
 
                         100% {
-                            transform: translateX(120%);
+                            transform: translateX(350%);
                         }
                     }
 
-                    @keyframes borderPulse {
-                        0%, 100% {
+                    @keyframes borderGlow {
+                        0%,
+                        100% {
                             box-shadow:
-                                0 0 0 0 rgba(99, 102, 241, 0);
+                                0 0 0 0 rgba(255, 107, 81, 0);
                         }
 
                         50% {
                             box-shadow:
-                                0 0 45px 0 rgba(99, 102, 241, 0.15);
+                                0 0 35px 0 rgba(255, 107, 81, 0.08);
                         }
                     }
 
-                    @keyframes tooltipIn {
-                        from {
-                            opacity: 0;
-                            transform: translateY(5px) scale(0.97);
+                    @keyframes blink {
+                        0%,
+                        100% {
+                            opacity: 0.35;
                         }
 
-                        to {
+                        50% {
                             opacity: 1;
-                            transform: translateY(0) scale(1);
                         }
                     }
 
-                    .login-slide {
-                        animation: slideRight 0.8s ease-out both;
+                    .login-card-animation {
+                        animation:
+                            slideUp 0.75s cubic-bezier(.22, 1, .36, 1) both,
+                            borderGlow 5s ease-in-out infinite;
                     }
 
-                    .chart-slide {
-                        animation: slideUp 0.8s ease-out both;
+                    .login-content-animation {
+                        animation:
+                            slideUp 0.75s 0.1s cubic-bezier(.22, 1, .36, 1) both;
                     }
 
-                    .chart-card {
-                        animation: borderPulse 4s ease-in-out infinite;
+                    .login-logo-animation {
+                        animation:
+                            logoAppear 0.7s 0.15s cubic-bezier(.22, 1, .36, 1) both;
                     }
 
-                    .float-slow {
-                        animation: floatSlow 7s ease-in-out infinite;
+                    .login-dot {
+                        animation: blink 2s ease-in-out infinite;
                     }
 
-                    .float-reverse {
-                        animation: floatReverse 9s ease-in-out infinite;
+                    /* =====================================================
+                       GOOGLE LOGIN RESPONSIVE
+                    ====================================================== */
+
+                    .google-wrapper {
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
                     }
 
-                    .pulse-glow {
-                        animation: pulseGlow 5s ease-in-out infinite;
-                    }
-
-                    .animate-tooltip {
-                        animation: tooltipIn 0.18s ease-out;
+                    .google-wrapper > div {
+                        max-width: 100% !important;
                     }
 
                     .google-wrapper iframe {
                         max-width: 100% !important;
                     }
+
+                    /* =====================================================
+                       MOBILE
+                    ====================================================== */
+
+                    @media (max-width: 480px) {
+                        .login-card {
+                            border-radius: 18px !important;
+                        }
+
+                        .login-content {
+                            padding: 28px 16px 22px !important;
+                        }
+
+                        .login-logo {
+                            margin-bottom: 18px !important;
+                        }
+
+                        .login-title {
+                            font-size: 28px !important;
+                        }
+
+                        .login-box {
+                            padding: 15px !important;
+                            border-radius: 16px !important;
+                        }
+
+                        .terms-text {
+                            max-width: 290px !important;
+                            font-size: 9px !important;
+                        }
+                    }
+
+                    /* =====================================================
+                       SMALL MOBILE
+                    ====================================================== */
+
+                    @media (max-width: 360px) {
+                        .login-content {
+                            padding-left: 12px !important;
+                            padding-right: 12px !important;
+                        }
+
+                        .login-box {
+                            padding: 13px !important;
+                        }
+
+                        .login-title {
+                            font-size: 26px !important;
+                        }
+
+                        .google-wrapper {
+                            transform: scale(0.96);
+                            transform-origin: center;
+                        }
+                    }
+
+                    /* =====================================================
+                       SHORT SCREEN
+                    ====================================================== */
+
+                    @media (max-height: 720px) {
+                        .login-content {
+                            padding-top: 24px !important;
+                            padding-bottom: 18px !important;
+                        }
+
+                        .login-logo {
+                            margin-bottom: 14px !important;
+                        }
+
+                        .intro-section {
+                            margin-bottom: 18px !important;
+                        }
+
+                        .terms-text {
+                            margin-top: 14px !important;
+                        }
+
+                        .status-badge {
+                            margin-top: 14px !important;
+                        }
+                    }
+
+                    /* =====================================================
+                       VERY SHORT SCREEN
+                    ====================================================== */
+
+                    @media (max-height: 600px) {
+                        .login-page {
+                            align-items: flex-start !important;
+                            padding-top: 70px !important;
+                            padding-bottom: 30px !important;
+                        }
+                    }
+
+                    /* =====================================================
+                       VERY LARGE DESKTOP
+                    ====================================================== */
+
+                    @media (min-width: 1600px) {
+                        .login-card {
+                            max-width: 530px !important;
+                        }
+                    }
+
+                    /* =====================================================
+                       REDUCED MOTION
+                    ====================================================== */
 
                     @media (prefers-reduced-motion: reduce) {
                         *,
@@ -382,110 +391,113 @@ function Login() {
                             transition-duration: 0.01ms !important;
                         }
                     }
-
-                    /* =================================================
-                       DESKTOP
-                    ================================================= */
-
-                    @media (min-width: 1024px) {
-                        .login-layout-card {
-                            height: 720px;
-                        }
-                    }
-
-                    /* =================================================
-                       TABLET
-                    ================================================= */
-
-                    @media (min-width: 640px) and (max-width: 1023px) {
-                        .login-layout-card {
-                            min-height: 650px;
-                        }
-                    }
-
-                    /* =================================================
-                       MOBILE
-                    ================================================= */
-
-                    @media (max-width: 639px) {
-                        .login-layout-card {
-                            min-height: auto;
-                        }
-                    }
                 `}
             </style>
 
-            {/* =====================================================
-                MAIN BLACK PAGE
-            ====================================================== */}
+            {/* =========================================================
+                MAIN PAGE
+                Uses fixed + inset-0 so this covers the true browser
+                viewport and centers correctly no matter what width/
+                margin/padding rules an ancestor (#root, body, a layout
+                wrapper, etc.) happens to have.
+            ========================================================= */}
 
-            <main className="relative min-h-screen w-full overflow-x-hidden bg-black font-sans text-white">
+            <main
+                className="
+                    fixed
+                    inset-0
+                    flex
+                    items-center
+                    justify-center
+                    overflow-x-hidden
+                    overflow-y-auto
+                    bg-[#171112]
+                    font-sans
+                    text-white
+                "
+            >
+                {/* =====================================================
+                    BACK BUTTON
+                ====================================================== */}
 
-                {/* =================================================
-                    GLOBAL BACKGROUND
-                ================================================== */}
+                <button
+                    type="button"
+                    onClick={() => navigate("/")}
+                    className="
+                        group
+                        fixed
+                        left-3
+                        top-3
+                        z-50
+                        flex
+                        items-center
+                        gap-2
+                        rounded-lg
+                        px-3
+                        py-2
+                        text-xs
+                        font-medium
+                        text-neutral-500
+                        transition-all
+                        duration-300
+                        hover:bg-white/[0.04]
+                        hover:text-white
+                        sm:left-6
+                        sm:top-6
+                        md:left-8
+                        md:top-7
+                    "
+                >
+                    <span
+                        className="
+                            text-base
+                            transition-transform
+                            duration-300
+                            group-hover:-translate-x-1
+                        "
+                    >
+                        ←
+                    </span>
 
-                <div className="pointer-events-none fixed inset-0 overflow-hidden">
+                    <span>Back</span>
+                </button>
 
-                    {/* Purple / Pink glow */}
+                {/* =====================================================
+                    CENTER CONTAINER
+                ====================================================== */}
 
-                    <div
-                        className="float-slow absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
-                        style={{
-                            background:
-                                "linear-gradient(135deg, #6366F1, #EC4899)",
-                        }}
-                    />
-
-                    {/* Cyan / Violet glow */}
-
-                    <div
-                        className="float-reverse absolute -bottom-48 -right-40 h-[550px] w-[550px] rounded-full opacity-15 blur-[130px]"
-                        style={{
-                            background:
-                                "linear-gradient(135deg, #06B6D4, #8B5CF6)",
-                        }}
-                    />
-
-                    {/* Center glow */}
-
-                    <div
-                        className="pulse-glow absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-                        style={{
-                            background:
-                                "radial-gradient(circle, rgba(99,102,241,0.18), transparent 70%)",
-                        }}
-                    />
-
-                    {/* Background grid */}
-
-                    <div className="absolute inset-0 opacity-[0.025]">
-                        <div
-                            className="h-full w-full"
-                            style={{
-                                backgroundImage:
-                                    "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                                backgroundSize:
-                                    "50px 50px",
-                            }}
-                        />
-                    </div>
-                </div>
-
-                {/* =================================================
-                    CENTER EVERYTHING
-                ================================================== */}
-
-                <div className="relative ml-30 z-10 flex min-h-screen w-full items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
-
+                <div
+                    className="
+                        login-page
+                        flex
+                        h-full
+                        w-full
+                        items-center
+                        justify-center
+                        overflow-y-auto
+                        px-3
+                        py-16
+                        sm:px-6
+                        sm:py-20
+                        md:px-8
+                    "
+                >
                     {/* =================================================
-                        EXACT SAME SIZE CONTAINER
+                        RESPONSIVE CARD WIDTH
                     ================================================== */}
 
-                    <div className="grid w-full max-w-[1400px] grid-cols-1 items-stretch justify-center gap-7 lg:grid-cols-2 lg:gap-8">
-
+                    <div
+                        className="
+                            mx-auto
+                            flex
+                            w-full
+                            max-w-[530px]
+                            items-center
+                            justify-center
+                        "
+                    >
                         {/* =================================================
-                            LEFT ANALYTICS CARD
+                            LOGIN CARD
                         ================================================== */}
 
                         <section
@@ -496,574 +508,637 @@ function Login() {
                             onMouseLeave={() =>
                                 setIsHovered(false)
                             }
-                            className="login-layout-card relative flex w-full items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-[#090909]/95 p-5 shadow-[0_30px_100px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:p-7 lg:p-8"
+                            className="
+                                login-card
+                                login-card-animation
+                                relative
+                                mx-auto
+                                w-full
+                                max-w-[530px]
+                                overflow-hidden
+                                rounded-[22px]
+                                border
+                                border-[#3a2928]
+                                bg-[#211718]
+                                shadow-[0_30px_90px_rgba(0,0,0,.60)]
+                            "
                         >
-
-                            {/* Background effects */}
-
-                            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-                                <div
-                                    className="float-slow absolute -left-32 -top-32 h-80 w-80 rounded-full opacity-15 blur-3xl"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, #6366F1, #EC4899)",
-                                    }}
-                                />
-
-                                <div
-                                    className="float-reverse absolute -bottom-40 -right-20 h-96 w-96 rounded-full opacity-10 blur-3xl"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, #14B8A6, #06B6D4)",
-                                    }}
-                                />
-
-                                <div className="absolute inset-0 opacity-[0.025]">
-                                    <div
-                                        className="h-full w-full"
-                                        style={{
-                                            backgroundImage:
-                                                "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-                                            backgroundSize:
-                                                "42px 42px",
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Mouse spotlight */}
+                            {/* =================================================
+                                MOUSE SPOTLIGHT
+                            ================================================== */}
 
                             <div
-                                className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-500"
+                                className="
+                                    pointer-events-none
+                                    absolute
+                                    inset-0
+                                    z-10
+                                    transition-opacity
+                                    duration-500
+                                "
                                 style={{
                                     opacity: isHovered ? 1 : 0,
-                                    background: `radial-gradient(
-                                        420px circle at ${mousePos.x}px ${mousePos.y}px,
-                                        rgba(99,102,241,0.10),
-                                        transparent 70%
-                                    )`,
+                                    background: `
+                                        radial-gradient(
+                                            350px circle at
+                                            ${mousePos.x}px
+                                            ${mousePos.y}px,
+                                            rgba(255,107,81,.07),
+                                            transparent 70%
+                                        )
+                                    `,
                                 }}
                             />
 
-                            {/* Analytics content */}
+                            {/* =================================================
+                                TOP SHINE
+                            ================================================== */}
 
-                            <div className="relative z-20  w-full flex-col justify-center">
-
-                                {/* Header */}
-
-                                <div className="chart-slide ml-35 mb-7">
-
-                                   
-
-                                    <h2 className="text-[2.3rem] font-black leading-[0.95] tracking-[-0.045em] text-white sm:text-5xl xl:text-6xl">
-
-                                        Stay focused.
-
-                                        <br />
-
-                                     
-                                    </h2>
-
-                                    <p className="mt-5 max-w-xl text-sm  leading-6 text-neutral-500 sm:text-base">
-                                        
-                                        
-                                        Timeout.
-                                    </p>
-                                </div>
-
-                                {/* Chart */}
-
-                                <div className="chart-card chart-slide relative overflow-hidden rounded-3xl border border-white/10 bg-[#101010]/90 p-4 shadow-[0_25px_80px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:p-6">
-
-                                    {/* Top shine */}
-
-                                    <div className="pointer-events-none absolute left-0 right-0 top-0 h-px overflow-hidden bg-gradient-to-r from-transparent via-indigo-400/70 to-transparent">
-
-                                        <div
-                                            className="h-full w-1/3 bg-white/70"
-                                            style={{
-                                                animation:
-                                                    "shimmer 4s linear infinite",
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Chart header */}
-
-                                    <div className="relative mb-5 flex items-start justify-between gap-3">
-
-                                        <div>
-
-                                            <h3 className="text-base font-bold tracking-tight text-white sm:text-lg">
-                                                Focus Sessions
-                                            </h3>
-
-                                            <p className="mt-1 text-xs text-neutral-600 sm:text-sm">
-                                                Monthly productivity
-                                                overview
-                                            </p>
-                                        </div>
-
-                                        <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5">
-
-                                            <span className="h-2 w-2 animate-pulse rounded-full bg-indigo-500" />
-
-                                            <span className="text-[10px] font-semibold text-neutral-500 sm:text-xs">
-                                                Live data
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Bar chart */}
-
-                                    <div className="h-[230px] w-full sm:h-[280px] lg:h-[270px] xl:h-[290px]">
-
-                                        <ResponsiveContainer
-                                            width="100%"
-                                            height="100%"
-                                        >
-                                            <BarChart
-                                                data={chartData}
-                                                margin={{
-                                                    top: 15,
-                                                    right: 5,
-                                                    left: -22,
-                                                    bottom: 5,
-                                                }}
-                                                barCategoryGap="25%"
-                                            >
-
-                                                <CartesianGrid
-                                                    vertical={false}
-                                                    stroke="#262626"
-                                                    strokeDasharray="3 5"
-                                                />
-
-                                                <XAxis
-                                                    dataKey="shortMonth"
-                                                    tick={{
-                                                        fill: "#737373",
-                                                        fontSize: 11,
-                                                        fontWeight: 500,
-                                                    }}
-                                                    axisLine={false}
-                                                    tickLine={false}
-                                                    dy={8}
-                                                />
-
-                                                <YAxis
-                                                    domain={[0, 90]}
-                                                    ticks={[
-                                                        0,
-                                                        10,
-                                                        20,
-                                                        30,
-                                                        40,
-                                                        50,
-                                                        60,
-                                                        70,
-                                                        80,
-                                                        90,
-                                                    ]}
-                                                    tick={{
-                                                        fill: "#525252",
-                                                        fontSize: 10,
-                                                    }}
-                                                    axisLine={false}
-                                                    tickLine={false}
-                                                />
-
-                                                <Tooltip
-                                                    cursor={{
-                                                        fill: "rgba(99,102,241,0.04)",
-                                                    }}
-                                                    content={
-                                                        <CustomTooltip />
-                                                    }
-                                                />
-
-                                                <Bar
-                                                    dataKey="value"
-                                                    radius={[
-                                                        7,
-                                                        7,
-                                                        2,
-                                                        2,
-                                                    ]}
-                                                    maxBarSize={48}
-                                                    animationBegin={250}
-                                                    animationDuration={1500}
-                                                    animationEasing="ease-out"
-                                                >
-                                                    {chartData.map(
-                                                        (
-                                                            entry,
-                                                            index
-                                                        ) => (
-                                                            <Cell
-                                                                key={`cell-${index}`}
-                                                                fill={
-                                                                    entry.color
-                                                                }
-                                                                fillOpacity={
-                                                                    0.25
-                                                                }
-                                                                stroke={
-                                                                    entry.color
-                                                                }
-                                                                strokeWidth={
-                                                                    1.5
-                                                                }
-                                                            />
-                                                        )
-                                                    )}
-                                                </Bar>
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </div>
-
-                                    {/* Stats */}
-
-                                    <div className="mt-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
-
-                                        <div className="rounded-2xl border border-white/5 bg-white/[0.025] p-3 sm:p-4">
-
-                                            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-600 sm:text-[10px]">
-                                                Total sessions
-                                            </p>
-
-                                            <p className="mt-1 text-xl font-black tracking-tight text-white sm:text-2xl">
-                                                {totalSessions}
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-2xl border border-white/5 bg-white/[0.025] p-3 sm:p-4">
-
-                                            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-600 sm:text-[10px]">
-                                                Best month
-                                            </p>
-
-                                            <div className="mt-1 flex items-center gap-2">
-
-                                                <span
-                                                    className="h-2.5 w-2.5 rounded-full"
-                                                    style={{
-                                                        backgroundColor:
-                                                            bestMonth.color,
-                                                    }}
-                                                />
-
-                                                <p className="text-sm font-black tracking-tight text-white sm:text-base">
-                                                    {
-                                                        bestMonth.shortMonth
-                                                    }{" "}
-                                                    ·{" "}
-                                                    {
-                                                        bestMonth.value
-                                                    }
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Quote */}
-
-                                <div className="chart-slide mt-5 flex items-center justify-center gap-3">
-
-                                    <div className="h-px w-8 bg-white/10" />
-
-                                    <p className="text-center text-[10px] font-medium italic text-neutral-600 sm:text-xs">
-                                        "Focus is the art of choosing
-                                        what to ignore."
-                                    </p>
-
-                                    <div className="h-px w-8 bg-white/10" />
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* =================================================
-                            RIGHT LOGIN CARD
-                        ================================================== */}
-
-                        <section className="login-layout-card relative flex w-full items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-[#090909]/95 p-5 text-white shadow-[0_30px_100px_rgba(0,0,0,0.7)] backdrop-blur-2xl sm:p-8 lg:p-10">
-
-                            {/* Login background */}
-
-                            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-                                {/* Grid */}
-
-                                <div className="absolute inset-0 opacity-[0.025]">
-
-                                    <div
-                                        className="h-full w-full"
-                                        style={{
-                                            backgroundImage:
-                                                "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-                                            backgroundSize:
-                                                "48px 48px",
-                                        }}
-                                    />
-                                </div>
-
-                                {/* Glow 1 */}
-
+                            <div
+                                className="
+                                    pointer-events-none
+                                    absolute
+                                    left-0
+                                    right-0
+                                    top-0
+                                    z-20
+                                    h-px
+                                    overflow-hidden
+                                    bg-gradient-to-r
+                                    from-transparent
+                                    via-[#ff6b51]/70
+                                    to-transparent
+                                "
+                            >
                                 <div
-                                    className="float-slow absolute -right-32 -top-32 h-96 w-96 rounded-full opacity-20 blur-3xl"
+                                    className="
+                                        h-full
+                                        w-1/3
+                                        bg-white/60
+                                    "
                                     style={{
-                                        background:
-                                            "linear-gradient(135deg, #6366F1, #8B5CF6)",
-                                    }}
-                                />
-
-                                {/* Glow 2 */}
-
-                                <div
-                                    className="float-reverse absolute -bottom-40 -left-32 h-96 w-96 rounded-full opacity-15 blur-3xl"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, #EC4899, #F43F5E)",
-                                    }}
-                                />
-
-                                {/* Center glow */}
-
-                                <div
-                                    className="pulse-glow absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-3xl"
-                                    style={{
-                                        background:
-                                            "radial-gradient(circle, #6366F1, transparent 70%)",
+                                        animation:
+                                            "shimmer 4s linear infinite",
                                     }}
                                 />
                             </div>
 
-                            {/* Back button */}
+                            {/* =================================================
+                                CONTENT
+                            ================================================== */}
 
-                            <div className="absolute left-5 top-5 z-30 sm:left-7 sm:top-7">
+                            <div
+                                className="
+                                    login-content
+                                    login-content-animation
+                                    relative
+                                    z-20
+                                    flex
+                                    flex-col
+                                    items-center
+                                    px-5
+                                    pb-6
+                                    pt-8
+                                    sm:px-8
+                                    sm:pb-7
+                                    sm:pt-10
+                                    md:px-10
+                                    md:pt-11
+                                "
+                            >
+                                {/* =================================================
+                                    LOGO
+                                ================================================== */}
 
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        navigate("/")
-                                    }
-                                    className="group flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium text-neutral-600 transition-all duration-300 hover:bg-neutral-900 hover:text-white"
+                                <div
+                                    className="
+                                        login-logo
+                                        login-logo-animation
+                                        mb-5
+                                        flex
+                                        flex-col
+                                        items-center
+                                        sm:mb-6
+                                    "
                                 >
-                                    <span className="text-base transition-transform duration-300 group-hover:-translate-x-1">
-                                        ←
-                                    </span>
-
-                                    <span>
-                                        Back
-                                    </span>
-                                </button>
-                            </div>
-
-                            {/* Login content */}
-
-                            <div className="relative z-20 flex w-full flex-col items-center justify-center">
-
-                                <div className="login-slide flex w-full max-w-[390px] flex-col items-center">
-
-                                    {/* Logo */}
-
-                                    <div className="mb-6 flex flex-col items-center">
-
-                                        <div className="group relative mb-5">
-
-                                            <div className="absolute -inset-3 rounded-2xl bg-indigo-500/10 opacity-0 blur-xl transition duration-500 group-hover:opacity-100" />
-
-                                            <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900 shadow-[0_15px_40px_rgba(0,0,0,0.5)] transition duration-500 group-hover:-translate-y-1 group-hover:border-indigo-500/30">
-
-                                                <span className="bg-gradient-to-br from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-xl font-black text-transparent">
-                                                    T
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <h1 className="text-3xl font-black uppercase tracking-[0.32em] text-white sm:text-4xl">
-                                            Timeout
-                                        </h1>
-
-                                        <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.38em] text-neutral-600">
-                                            Workspace
-                                        </p>
-                                    </div>
-
-                                    {/* Divider */}
-
-                                    <div className="relative mb-7 h-px w-16 overflow-hidden bg-neutral-800">
+                                    <div
+                                        className="
+                                            relative
+                                            mb-4
+                                            sm:mb-5
+                                        "
+                                    >
+                                        <div
+                                            className="
+                                                pointer-events-none
+                                                absolute
+                                                -inset-3
+                                                rounded-2xl
+                                                bg-[#ff6b51]/10
+                                                blur-xl
+                                            "
+                                        />
 
                                         <div
-                                            className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
-                                            style={{
-                                                animation:
-                                                    "shimmer 3s linear infinite",
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Tagline */}
-
-                                    <div className="mb-8 text-center">
-
-                                        <p className="text-sm font-medium text-neutral-300 sm:text-base">
-                                            Quiet and productive focus.
-                                        </p>
-
-                                        <p className="mt-1 bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-sm font-bold text-transparent sm:text-base">
-                                            All in one.
-                                        </p>
-                                    </div>
-
-                                    {/* Login box */}
-
-                                    <div className="group relative w-full">
-
-                                        {/* Glow */}
-
-                                        <div className="absolute -inset-px rounded-3xl bg-gradient-to-r from-indigo-500/20 via-transparent to-pink-500/20 opacity-0 blur transition duration-500 group-hover:opacity-100" />
-
-                                        <div className="relative overflow-hidden rounded-3xl border border-neutral-800/80 bg-[#0D0D0D]/95 p-5 shadow-[0_30px_100px_rgba(0,0,0,0.55)] backdrop-blur-2xl sm:p-7">
-
-                                            {/* Shine */}
-
-                                            <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-                                            {/* Heading */}
-
-                                            <div className="mb-6 text-center">
-
-                                                <h2 className="text-base font-bold text-white sm:text-lg">
-                                                    Welcome back
-                                                </h2>
-
-                                                <p className="mt-1.5 text-xs leading-5 text-neutral-500">
-                                                    Sign in to continue
-                                                    to your workspace
-                                                </p>
-                                            </div>
-
-                                            {/* Google */}
-
-                                            <div className="google-wrapper flex min-h-[44px] w-full items-center justify-center overflow-hidden rounded-xl">
-
-                                                {!googleClientId ? (
-
-                                                    <div className="w-full rounded-xl border border-red-900/40 bg-red-950/20 p-4 text-center text-xs leading-5 text-red-400">
-
-                                                        <p className="mb-1 font-bold">
-                                                            Google Login
-                                                            Configuration
-                                                            Error
-                                                        </p>
-
-                                                        <p className="text-[10px] text-red-400/80">
-                                                            VITE_GOOGLE_CLIENT_ID
-                                                            is not loaded.
-                                                            Check your
-                                                            .env file and
-                                                            restart Vite.
-                                                        </p>
-                                                    </div>
-
-                                                ) : (
-
-                                                    <GoogleLogin
-                                                        onSuccess={
-                                                            handleGoogleSuccess
-                                                        }
-                                                        onError={
-                                                            handleGoogleError
-                                                        }
-                                                        theme="outline"
-                                                        shape="pill"
-                                                        size="large"
-                                                        width="320"
-                                                        text="signin_with"
-                                                        useOneTap={
-                                                            false
-                                                        }
-                                                    />
-                                                )}
-                                            </div>
-
-                                            {/* Loading */}
-
-                                            {isLoading && (
-
-                                                <div className="mt-5 flex items-center justify-center gap-2">
-
-                                                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-neutral-700 border-t-indigo-400" />
-
-                                                    <p className="text-[11px] font-medium text-neutral-500">
-                                                        Signing you in...
-                                                    </p>
-                                                </div>
-                                            )}
-
-                                            {/* Security */}
-
-                                            <div className="mt-6 flex items-center justify-center gap-2 border-t border-neutral-800/70 pt-5">
-
-                                                <svg
-                                                    viewBox="0 0 24 24"
-                                                    className="h-3.5 w-3.5 text-neutral-600"
-                                                    fill="none"
+                                            className="
+                                                relative
+                                                flex
+                                                h-12
+                                                w-12
+                                                items-center
+                                                justify-center
+                                                rounded-xl
+                                                border
+                                                border-[#49302d]
+                                                bg-[#2a1b1d]
+                                                shadow-[0_15px_45px_rgba(0,0,0,.45)]
+                                                sm:h-14
+                                                sm:w-14
+                                            "
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                className="
+                                                    h-6
+                                                    w-6
+                                                    text-[#ff6b51]
+                                                    sm:h-7
+                                                    sm:w-7
+                                                "
+                                            >
+                                                <path
+                                                    d="M8.5 8L5 12L8.5 16"
                                                     stroke="currentColor"
                                                     strokeWidth="2"
                                                     strokeLinecap="round"
                                                     strokeLinejoin="round"
-                                                >
+                                                />
 
-                                                    <rect
-                                                        x="3"
-                                                        y="11"
-                                                        width="18"
-                                                        height="11"
-                                                        rx="2"
-                                                    />
+                                                <path
+                                                    d="M15.5 8L19 12L15.5 16"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
 
-                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                                </svg>
-
-                                                <span className="text-[10px] tracking-wide text-neutral-600">
-                                                    Secure passwordless
-                                                    authentication.
-                                                </span>
-                                            </div>
+                                                <path
+                                                    d="M13.5 5L10.5 19"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
 
-                                    {/* Terms */}
+                                    <h1
+                                        className="
+                                            login-title
+                                            text-center
+                                            text-[30px]
+                                            font-black
+                                            tracking-[-0.04em]
+                                            text-white
+                                            sm:text-3xl
+                                            md:text-[35px]
+                                        "
+                                    >
+                                        Timeout
+                                    </h1>
 
-                                    <p className="mt-6 max-w-[330px] text-center text-[9px] leading-5 text-neutral-600 sm:text-[10px]">
-
-                                        By signing in, you agree to our{" "}
-
-                                        <span className="text-neutral-400 transition hover:text-white">
-                                            Terms of Service
-                                        </span>
-
-                                        {" "}and{" "}
-
-                                        <span className="text-neutral-400 transition hover:text-white">
-                                            Privacy Policy
-                                        </span>
-
-                                        .
+                                    <p
+                                        className="
+                                            mt-2
+                                            text-[8px]
+                                            font-bold
+                                            uppercase
+                                            tracking-[0.35em]
+                                            text-[#8c7775]
+                                            sm:text-[9px]
+                                            sm:tracking-[0.4em]
+                                        "
+                                    >
+                                        Focus Workspace
                                     </p>
+                                </div>
+
+                                {/* =================================================
+                                    INTRO
+                                ================================================== */}
+
+                                <div
+                                    className="
+                                        intro-section
+                                        mb-6
+                                        w-full
+                                        text-center
+                                        sm:mb-7
+                                    "
+                                >
+                                    <h2
+                                        className="
+                                            text-lg
+                                            font-semibold
+                                            tracking-tight
+                                            text-white
+                                            sm:text-xl
+                                        "
+                                    >
+                                        Welcome back
+                                    </h2>
+
+                                    <p
+                                        className="
+                                            mt-2
+                                            px-2
+                                            text-[11px]
+                                            leading-5
+                                            text-[#907e7c]
+                                            sm:text-xs
+                                        "
+                                    >
+                                        Sign in to continue to your
+                                        workspace
+                                    </p>
+                                </div>
+
+                                {/* =================================================
+                                    LOGIN BOX
+                                ================================================== */}
+
+                                <div
+                                    className="
+                                        group
+                                        relative
+                                        flex
+                                        w-full
+                                        min-w-0
+                                    "
+                                >
+                                    <div
+                                        className="
+                                            pointer-events-none
+                                            absolute
+                                            -inset-px
+                                            rounded-2xl
+                                            bg-gradient-to-r
+                                            from-[#ff6b51]/20
+                                            via-transparent
+                                            to-[#ff846f]/10
+                                            opacity-0
+                                            blur
+                                            transition
+                                            duration-500
+                                            group-hover:opacity-100
+                                        "
+                                    />
+
+                                    <div
+                                        className="
+                                            login-box
+                                            relative
+                                            w-full
+                                            min-w-0
+                                            overflow-hidden
+                                            rounded-2xl
+                                            border
+                                            border-[#392827]
+                                            bg-[#191112]
+                                            p-4
+                                            shadow-[0_25px_70px_rgba(0,0,0,.4)]
+                                            sm:p-5
+                                            md:p-6
+                                        "
+                                    >
+                                        {/* Top Line */}
+
+                                        <div
+                                            className="
+                                                pointer-events-none
+                                                absolute
+                                                left-0
+                                                right-0
+                                                top-0
+                                                h-px
+                                                bg-gradient-to-r
+                                                from-transparent
+                                                via-[#ff6b51]/40
+                                                to-transparent
+                                            "
+                                        />
+
+                                        {/* Account Access */}
+
+                                        <div
+                                            className="
+                                                mb-4
+                                                text-center
+                                                sm:mb-5
+                                            "
+                                        >
+                                            <p
+                                                className="
+                                                    text-[9px]
+                                                    font-bold
+                                                    uppercase
+                                                    tracking-[0.2em]
+                                                    text-[#796967]
+                                                    sm:text-[10px]
+                                                "
+                                            >
+                                                Account access
+                                            </p>
+                                        </div>
+
+                                        {/* =================================================
+                                            GOOGLE LOGIN
+                                        ================================================== */}
+
+                                        <div
+                                            className="
+                                                google-wrapper
+                                                min-h-[44px]
+                                                w-full
+                                            "
+                                        >
+                                            {!googleClientId ? (
+                                                <div
+                                                    className="
+                                                        w-full
+                                                        rounded-xl
+                                                        border
+                                                        border-red-900/40
+                                                        bg-red-950/20
+                                                        p-3
+                                                        text-center
+                                                        sm:p-4
+                                                    "
+                                                >
+                                                    <p
+                                                        className="
+                                                            mb-1
+                                                            text-xs
+                                                            font-bold
+                                                            text-red-400
+                                                        "
+                                                    >
+                                                        Google Login
+                                                        Configuration Error
+                                                    </p>
+
+                                                    <p
+                                                        className="
+                                                            text-[9px]
+                                                            leading-5
+                                                            text-red-400/80
+                                                            sm:text-[10px]
+                                                        "
+                                                    >
+                                                        VITE_GOOGLE_CLIENT_ID
+                                                        is not loaded.
+                                                        Check your .env
+                                                        file and restart
+                                                        Vite.
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <GoogleLogin
+                                                    onSuccess={
+                                                        handleGoogleSuccess
+                                                    }
+                                                    onError={
+                                                        handleGoogleError
+                                                    }
+                                                    theme="filled_black"
+                                                    shape="rectangular"
+                                                    size="large"
+                                                    width="320"
+                                                    text="signin_with"
+                                                    useOneTap={false}
+                                                />
+                                            )}
+                                        </div>
+
+                                        {/* =================================================
+                                            LOADING
+                                        ================================================== */}
+
+                                        {isLoading && (
+                                            <div
+                                                className="
+                                                    mt-4
+                                                    flex
+                                                    items-center
+                                                    justify-center
+                                                    gap-2
+                                                    sm:mt-5
+                                                "
+                                            >
+                                                <span
+                                                    className="
+                                                        h-3.5
+                                                        w-3.5
+                                                        animate-spin
+                                                        rounded-full
+                                                        border-2
+                                                        border-[#493938]
+                                                        border-t-[#ff6b51]
+                                                    "
+                                                />
+
+                                                <p
+                                                    className="
+                                                        text-[10px]
+                                                        font-medium
+                                                        text-[#81706e]
+                                                        sm:text-[11px]
+                                                    "
+                                                >
+                                                    Signing you in...
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {/* =================================================
+                                            SECURITY
+                                        ================================================== */}
+
+                                        <div
+                                            className="
+                                                mt-5
+                                                flex
+                                                items-center
+                                                justify-center
+                                                gap-2
+                                                border-t
+                                                border-[#302222]
+                                                pt-4
+                                                sm:mt-6
+                                                sm:pt-5
+                                            "
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                className="
+                                                    h-3
+                                                    w-3
+                                                    shrink-0
+                                                    text-[#655654]
+                                                    sm:h-3.5
+                                                    sm:w-3.5
+                                                "
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="1.8"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <rect
+                                                    x="3"
+                                                    y="11"
+                                                    width="18"
+                                                    height="11"
+                                                    rx="2"
+                                                />
+
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                            </svg>
+
+                                            <span
+                                                className="
+                                                    text-center
+                                                    text-[9px]
+                                                    tracking-wide
+                                                    text-[#665654]
+                                                    sm:text-[10px]
+                                                "
+                                            >
+                                                Secure passwordless
+                                                authentication
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* =================================================
+                                    TERMS
+                                ================================================== */}
+
+                                <p
+                                    className="
+                                        terms-text
+                                        mt-5
+                                        max-w-[310px]
+                                        text-center
+                                        text-[9px]
+                                        leading-5
+                                        text-[#665654]
+                                        sm:mt-6
+                                        sm:text-[10px]
+                                    "
+                                >
+                                    By signing in, you agree to our{" "}
+                                    <span
+                                        className="
+                                            cursor-pointer
+                                            text-[#927b77]
+                                            transition
+                                            hover:text-[#ff806b]
+                                        "
+                                    >
+                                        Terms of Service
+                                    </span>{" "}
+                                    and{" "}
+                                    <span
+                                        className="
+                                            cursor-pointer
+                                            text-[#927b77]
+                                            transition
+                                            hover:text-[#ff806b]
+                                        "
+                                    >
+                                        Privacy Policy
+                                    </span>
+                                    .
+                                </p>
+
+                                {/* =================================================
+                                    STATUS
+                                ================================================== */}
+
+                                <div
+                                    className="
+                                        status-badge
+                                        mt-5
+                                        flex
+                                        items-center
+                                        gap-2
+                                        rounded-full
+                                        border
+                                        border-[#382827]
+                                        bg-[#191112]
+                                        px-3
+                                        py-1.5
+                                        sm:mt-6
+                                    "
+                                >
+                                    <span
+                                        className="
+                                            login-dot
+                                            h-1.5
+                                            w-1.5
+                                            shrink-0
+                                            rounded-full
+                                            bg-[#ff6b51]
+                                        "
+                                    />
+
+                                    <span
+                                        className="
+                                            text-[7px]
+                                            font-semibold
+                                            uppercase
+                                            tracking-[0.16em]
+                                            text-[#756361]
+                                            sm:text-[8px]
+                                            sm:tracking-[0.18em]
+                                        "
+                                    >
+                                        Workspace online
+                                    </span>
                                 </div>
                             </div>
 
-                            {/* Footer */}
+                            {/* =================================================
+                                FOOTER
+                            ================================================== */}
 
-                            <div className="absolute bottom-5 left-0 right-0 z-20 text-center">
-
-                                <p className="text-[8px] uppercase tracking-[0.3em] text-neutral-700 sm:text-[9px]">
-                                    © {new Date().getFullYear()} Timmo
+                            <div
+                                className="
+                                    relative
+                                    z-20
+                                    border-t
+                                    border-[#302222]
+                                    px-4
+                                    py-3
+                                    text-center
+                                    sm:px-5
+                                    sm:py-4
+                                "
+                            >
+                                <p
+                                    className="
+                                        text-[7px]
+                                        uppercase
+                                        tracking-[0.25em]
+                                        text-[#554846]
+                                        sm:text-[9px]
+                                        sm:tracking-[0.3em]
+                                    "
+                                >
+                                    © {new Date().getFullYear()} Timeout
                                 </p>
                             </div>
                         </section>
@@ -1075,4 +1150,3 @@ function Login() {
 }
 
 export default Login;
-
