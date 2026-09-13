@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { FaFire } from "react-icons/fa6";
 import Sidecard from "./sidecard";
@@ -14,6 +13,8 @@ import {
     HeartCrack,
     LifeBuoy,
     Ghost,
+    Medal,
+    Award,
 } from "lucide-react";
 
 
@@ -132,6 +133,127 @@ const BADGES = {
         style: "bg-amber-400 border-amber-400 text-black",
         glow: "shadow-amber-500/10 hover:shadow-amber-500/30",
     },
+};
+
+
+/* =========================================================
+   RANK BADGE CONFIG (1 / 2 / 3 ranked-tab style badges)
+========================================================= */
+
+const RANK_BADGES = {
+    1: {
+        Icon: Crown,
+        gradient: "linear-gradient(155deg, #fff3c4 0%, #ffd54a 28%, #f7a600 62%, #a85d00 100%)",
+        ring: "#ffd54a",
+        glow: "rgba(255, 197, 24, 0.85)",
+        text: "#3a2400",
+        anim: "rankGoldPulse",
+    },
+    2: {
+        Icon: Medal,
+        gradient: "linear-gradient(155deg, #f5f7fa 0%, #d9dee5 28%, #9aa4b2 62%, #5b6472 100%)",
+        ring: "#d9dee5",
+        glow: "rgba(203, 213, 225, 0.75)",
+        text: "#1b2027",
+        anim: "rankSilverPulse",
+    },
+    3: {
+        Icon: Award,
+        gradient: "linear-gradient(155deg, #ffd9ad 0%, #f2a35c 28%, #c96a1f 62%, #6e3208 100%)",
+        ring: "#f2a35c",
+        glow: "rgba(226, 137, 61, 0.8)",
+        text: "#2c1400",
+        anim: "rankBronzePulse",
+    },
+};
+
+
+/* =========================================================
+   RANK BADGE COMPONENT
+========================================================= */
+
+const RankBadge = ({ rank }) => {
+
+    const config = RANK_BADGES[rank];
+
+    /* --- Ranks below top 3: plain numbered pill --- */
+
+    if (!config) {
+        return (
+            <div
+                className="
+                    size-8
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                    text-xs
+                    font-bold
+                    bg-white/5
+                    border
+                    border-white/20
+                    text-white
+                "
+            >
+                <span>{rank}</span>
+            </div>
+        );
+    }
+
+    const { Icon, gradient, ring, glow, text, anim } = config;
+
+    /* --- Ranks 1-3: emblem badge with icon + number, glow animation --- */
+
+    return (
+        <div
+            className="relative flex items-center justify-center size-11 shrink-0"
+            style={{ animation: `${anim} 2.4s ease-in-out infinite` }}
+        >
+
+            {/* Outer glow ring */}
+            <div
+                className="absolute inset-0 rounded-2xl blur-[6px] opacity-70"
+                style={{ background: gradient }}
+            />
+
+            {/* Badge body */}
+            <div
+                className="
+                    relative
+                    size-10
+                    rounded-2xl
+                    flex
+                    flex-col
+                    items-center
+                    justify-center
+                    border
+                    shadow-lg
+                "
+                style={{
+                    background: gradient,
+                    borderColor: ring,
+                    color: text,
+                    boxShadow: `0 0 14px 0px ${glow}`,
+                }}
+            >
+
+                <Icon
+                    className="size-4"
+                    strokeWidth={2.5}
+                    style={{ color: text }}
+                />
+
+                <span
+                    className="text-[10px] font-black leading-none mt-0.5"
+                    style={{ color: text }}
+                >
+                    {rank}
+                </span>
+
+            </div>
+
+        </div>
+    );
 };
 
 
@@ -287,59 +409,30 @@ function Leaderboard() {
 
 
     /* ---------------------------------------------------------
-       RANK STYLE
+       ROW STYLE (background highlight for top 3 rows)
     --------------------------------------------------------- */
 
-    const getRankStyle = (rank) => {
+    const getRowStyle = (rank) => {
 
         if (rank === 1) {
 
-            return {
-                className:
-                    "border-2 border-yellow-500 bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-transparent font-bold shadow-[0_0_10px_0px] shadow-yellow-400",
-
-                style: {
-                    animation:
-                        "glow 3s ease-in-out infinite",
-                },
-            };
+            return "border-2 border-yellow-500/40 bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-transparent";
         }
 
 
         if (rank === 2) {
 
-            return {
-                className:
-                    "border-2 bg-zinc-400/10 border-zinc-300/40 shadow-[0_0_10px_0px_rgba(212,212,216,0.08)]",
-
-                style: {
-                    animation:
-                        "silverGlow 3s ease-in-out infinite",
-                },
-            };
+            return "border-2 border-zinc-300/30 bg-zinc-400/5";
         }
 
 
         if (rank === 3) {
 
-            return {
-                className:
-                    "border-2 bg-orange-500/10 border-orange-400/40 shadow-[0_0_10px_0px_rgba(251,146,60,0.08)]",
-
-                style: {
-                    animation:
-                        "bronzeGlow 3s ease-in-out infinite",
-                },
-            };
+            return "border-2 border-orange-400/30 bg-orange-500/5";
         }
 
 
-        return {
-            className:
-                "bg-white/5 border-white/20 text-white",
-
-            style: {},
-        };
+        return "border-b-2 border-white/10";
     };
 
 
@@ -531,6 +624,22 @@ function Leaderboard() {
                     "gray transparent",
             }}
         >
+
+            {/* Rank badge glow keyframes */}
+            <style>{`
+                @keyframes rankGoldPulse {
+                    0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 197, 24, 0.55)); transform: translateY(0px); }
+                    50% { filter: drop-shadow(0 0 11px rgba(255, 197, 24, 0.95)); transform: translateY(-1px); }
+                }
+                @keyframes rankSilverPulse {
+                    0%, 100% { filter: drop-shadow(0 0 3px rgba(203, 213, 225, 0.45)); transform: translateY(0px); }
+                    50% { filter: drop-shadow(0 0 9px rgba(203, 213, 225, 0.85)); transform: translateY(-1px); }
+                }
+                @keyframes rankBronzePulse {
+                    0%, 100% { filter: drop-shadow(0 0 3px rgba(226, 137, 61, 0.5)); transform: translateY(0px); }
+                    50% { filter: drop-shadow(0 0 9px rgba(226, 137, 61, 0.9)); transform: translateY(-1px); }
+                }
+            `}</style>
 
             <div
                 className="
@@ -1172,8 +1281,8 @@ function Leaderboard() {
                                                 const rank =
                                                     i + 1;
 
-                                                const rankStyle =
-                                                    getRankStyle(
+                                                const rowStyle =
+                                                    getRowStyle(
                                                         rank
                                                     );
 
@@ -1197,8 +1306,6 @@ function Leaderboard() {
                                                         }
                                                         className={`
                                                             bg-white/2
-                                                            border-b-2
-                                                            border-white/10
                                                             px-4
                                                             md:px-10
                                                             py-1
@@ -1212,7 +1319,7 @@ function Leaderboard() {
                                                             duration-150
                                                             hover:bg-neutral-800/20
                                                             hover:z-30
-
+                                                            ${rowStyle}
                                                             ${isMe
                                                                 ? "bg-white/5"
                                                                 : ""
@@ -1224,27 +1331,7 @@ function Leaderboard() {
                                                             RANK
                                                         ================================================= */}
 
-                                                        <div
-                                                            className={`
-                                                                rounded-full
-                                                                text-xs
-                                                                size-8
-                                                                flex
-                                                                items-center
-                                                                justify-center
-                                                                font-bold
-                                                                ${rankStyle.className}
-                                                            `}
-                                                            style={
-                                                                rankStyle.style
-                                                            }
-                                                        >
-
-                                                            <span>
-                                                                {rank}
-                                                            </span>
-
-                                                        </div>
+                                                        <RankBadge rank={rank} />
 
 
                                                         {/* =================================================
